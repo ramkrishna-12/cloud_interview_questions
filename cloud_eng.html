@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebSpider Interview Prep — Ravan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c25;
+    --border: #232736;
+    --accent: #f97316;
+    --accent2: #38bdf8;
+    --accent3: #a78bfa;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --tag-bg: #1e2332;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #0f1420 0%, #151b2e 60%, #0f1420 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(249,115,22,.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 30%;
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, rgba(56,189,248,.10) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(249,115,22,.12); border: 1px solid rgba(249,115,22,.3);
+    color: var(--accent); font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 500; padding: 4px 12px; border-radius: 999px;
+    letter-spacing: .05em; margin-bottom: 16px;
+  }
+  .badge::before { content: '●'; font-size: 8px; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  h1 span { color: var(--accent); }
+
+  .meta { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+  .meta-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .meta-item strong { color: var(--text); font-weight: 500; }
+
+  .timer-bar {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;
+  }
+  .time-block {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 18px; text-align: center;
+    font-size: 12px;
+  }
+  .time-block .dur { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--accent2); }
+  .time-block .lbl { color: var(--muted); font-size: 11px; margin-top: 2px; }
+
+  /* ── Layout ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 40px 80px; }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px 28px; margin-bottom: 40px;
+  }
+  .toc h3 {
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .toc a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text); text-decoration: none;
+    font-size: 13px; transition: all .2s;
+  }
+  .toc a:hover { border-color: var(--accent); color: var(--accent); }
+  .toc a .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 52px; }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; }
+  .section-sub { font-size: 12px; color: var(--muted); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── Question Card ── */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .q-card:hover { border-color: #2d3448; }
+
+  .q-header {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 20px 24px 16px;
+    cursor: pointer;
+  }
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--muted); min-width: 28px;
+    padding-top: 2px;
+  }
+  .q-text { font-weight: 500; font-size: 15px; flex: 1; }
+  .q-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 2px 8px; border-radius: 4px;
+    background: var(--tag-bg); color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .tag.hard { color: #f87171; border-color: rgba(248,113,113,.3); background: rgba(248,113,113,.06); }
+  .tag.medium { color: var(--yellow); border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.06); }
+  .tag.easy { color: var(--green); border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.06); }
+
+  .q-answer {
+    padding: 0 24px 20px 66px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .q-answer-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--green); letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: 10px; padding-top: 16px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .q-answer-label::before { content: '✓'; }
+
+  .answer-body { font-size: 14px; line-height: 1.8; color: #cbd5e1; }
+  .answer-body strong { color: var(--text); }
+  .answer-body code {
+    font-family: 'JetBrains Mono', monospace;
+    background: #1a1f2e; color: var(--accent2);
+    padding: 1px 6px; border-radius: 4px; font-size: 12px;
+  }
+
+  pre {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: #a5f3fc;
+    overflow-x: auto; margin: 12px 0;
+    line-height: 1.6;
+  }
+  pre .cm { color: var(--muted); font-style: italic; }
+  pre .kw { color: #c084fc; }
+  pre .st { color: #86efac; }
+  pre .fn { color: #fbbf24; }
+
+  .tip-box {
+    background: rgba(56,189,248,.06); border: 1px solid rgba(56,189,248,.2);
+    border-left: 3px solid var(--accent2); border-radius: 0 8px 8px 0;
+    padding: 12px 16px; margin-top: 14px; font-size: 13px; color: #93c5fd;
+  }
+  .tip-box strong { color: var(--accent2); }
+
+  .warn-box {
+    background: rgba(249,115,22,.06); border: 1px solid rgba(249,115,22,.2);
+    border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+    padding: 12px 16px; margin-top: 14px; font-size: 13px; color: #fdba74;
+  }
+
+  ul.ans-list { padding-left: 18px; margin-top: 8px; }
+  ul.ans-list li { margin-bottom: 6px; }
+
+  /* ── Strategy Box ── */
+  .strategy {
+    background: linear-gradient(135deg, #0f1724 0%, #111e30 100%);
+    border: 1px solid rgba(56,189,248,.2);
+    border-radius: 12px; padding: 28px 32px; margin-bottom: 40px;
+  }
+  .strategy h3 {
+    font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+    color: var(--accent2); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .strategy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .strategy-item {
+    background: rgba(255,255,255,.03); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+  }
+  .strategy-item .s-time { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 13px; font-weight: 500; }
+  .strategy-item .s-topic { font-size: 13px; color: var(--text); margin-top: 4px; }
+  .strategy-item .s-note { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  footer {
+    text-align: center; padding: 32px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 32px 20px 24px; }
+    main { padding: 28px 20px 60px; }
+    .q-answer { padding-left: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="badge">INTERVIEW PREP · WEBSPIDER</div>
+    <h1>3-Hour DevOps Interview<br><span>Question Bank & Optimum Answers</span></h1>
+    <p style="color:var(--muted); font-size:14px; max-width:580px; margin-top:8px;">
+      Tailored for Ravan — Python Developer role at WebSpider, Kolkata. 
+      Written virtual format covering AWS, GCP, Docker, CI/CD, Windows Server 2022 & more.
+    </p>
+    <div class="meta">
+      <div class="meta-item">📅 <strong>Tomorrow</strong> · Virtual Written</div>
+      <div class="meta-item">⏱ <strong>3 Hours</strong> · ~35 Questions</div>
+      <div class="meta-item">🏢 <strong>WebSpider</strong> · Kolkata</div>
+    </div>
+    <div class="timer-bar">
+      <div class="time-block"><div class="dur">45m</div><div class="lbl">AWS</div></div>
+      <div class="time-block"><div class="dur">30m</div><div class="lbl">GCP</div></div>
+      <div class="time-block"><div class="dur">35m</div><div class="lbl">Docker</div></div>
+      <div class="time-block"><div class="dur">30m</div><div class="lbl">CI/CD</div></div>
+      <div class="time-block"><div class="dur">25m</div><div class="lbl">Windows Server</div></div>
+      <div class="time-block"><div class="dur">35m</div><div class="lbl">Python/FastAPI DevOps</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Strategy -->
+  <div class="strategy">
+    <h3>⚡ 3-Hour Time Strategy</h3>
+    <div class="strategy-grid">
+      <div class="strategy-item">
+        <div class="s-time">0:00 – 0:45</div>
+        <div class="s-topic">AWS Core Services</div>
+        <div class="s-note">EC2, VPC, RDS, IAM, S3, ALB, Auto Scaling</div>
+      </div>
+      <div class="strategy-item">
+        <div class="s-time">0:45 – 1:15</div>
+        <div class="s-topic">GCP Fundamentals</div>
+        <div class="s-note">Compute Engine, GKE, Cloud Run, IAM, BigQuery</div>
+      </div>
+      <div class="strategy-item">
+        <div class="s-time">1:15 – 1:50</div>
+        <div class="s-topic">Docker & Containerization</div>
+        <div class="s-note">Dockerfile, Compose, networking, volumes, optimization</div>
+      </div>
+      <div class="strategy-item">
+        <div class="s-time">1:50 – 2:20</div>
+        <div class="s-topic">CI/CD Pipelines</div>
+        <div class="s-note">GitHub Actions, GitLab CI, deployment strategies</div>
+      </div>
+      <div class="strategy-item">
+        <div class="s-time">2:20 – 2:45</div>
+        <div class="s-topic">Windows Server 2022</div>
+        <div class="s-note">IIS, AD DS, PowerShell, WSUS, RDP</div>
+      </div>
+      <div class="strategy-item">
+        <div class="s-time">2:45 – 3:00</div>
+        <div class="s-topic">Python/FastAPI DevOps</div>
+        <div class="s-note">Production deployment, monitoring, Celery, async</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>Quick Navigation</h3>
+    <div class="toc-grid">
+      <a href="#aws"><span class="dot" style="background:#f97316"></span>AWS (Q1–Q8)</a>
+      <a href="#gcp"><span class="dot" style="background:#38bdf8"></span>GCP (Q9–Q14)</a>
+      <a href="#docker"><span class="dot" style="background:#a78bfa"></span>Docker (Q15–Q21)</a>
+      <a href="#cicd"><span class="dot" style="background:#34d399"></span>CI/CD (Q22–Q27)</a>
+      <a href="#windows"><span class="dot" style="background:#fbbf24"></span>Windows Server (Q28–Q32)</a>
+      <a href="#pydevops"><span class="dot" style="background:#f43f5e"></span>Python DevOps (Q33–Q37)</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ AWS ══════════════════════════════════════════ -->
+  <div class="section" id="aws">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(249,115,22,.12); color:var(--accent)">☁️</div>
+      <div>
+        <div class="section-title">Amazon Web Services (AWS)</div>
+        <div class="section-sub">8 questions · 45 minutes · EC2 / VPC / RDS / IAM / S3 / ALB / Auto Scaling</div>
+      </div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q1</div>
+        <div>
+          <div class="q-text">Explain the difference between Security Groups and NACLs in AWS VPC. When would you use each?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">VPC</span><span class="tag">Networking</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Security Groups</strong> are stateful, instance-level firewalls. If you allow inbound traffic on port 80, the return traffic is automatically allowed — you don't need to write an explicit outbound rule. They only support <em>allow</em> rules.<br><br>
+          <strong>NACLs (Network Access Control Lists)</strong> are stateless, subnet-level firewalls. You must explicitly allow both inbound AND outbound rules. They support both <em>allow</em> and <em>deny</em> rules, and rules are evaluated in numeric order (lowest first).<br><br>
+          <strong>When to use each:</strong>
+          <ul class="ans-list">
+            <li>Use <strong>Security Groups</strong> for fine-grained, per-instance control — e.g., allow only your ALB to talk to your EC2 on port 8000.</li>
+            <li>Use <strong>NACLs</strong> for broad subnet-level blocking — e.g., block a known malicious IP range at the subnet boundary, or add a defense-in-depth layer.</li>
+          </ul>
+          <div class="tip-box"><strong>Ravan's context:</strong> In your 3-tier compliance app, you likely used SGs to allow ALB → EC2 on app port, and EC2 → RDS on 3306. Mention that pattern if asked for a real example.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q2</div>
+        <div>
+          <div class="q-text">What is the difference between an ALB and an NLB? When would you pick NLB over ALB?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Load Balancing</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>ALB (Application Load Balancer)</strong> operates at Layer 7 (HTTP/HTTPS). It understands HTTP headers, paths, host-based routing, and can route <code>/api/*</code> to one target group and <code>/static/*</code> to another. It supports WebSockets and gRPC. Best for microservices and HTTP workloads.<br><br>
+          <strong>NLB (Network Load Balancer)</strong> operates at Layer 4 (TCP/UDP/TLS). It's ultra-low latency, preserves the client's source IP, and can handle millions of requests per second. Best for: real-time gaming, IoT, financial trading, or any TCP workload where HTTP-level features aren't needed.<br><br>
+          <strong>Pick NLB when:</strong> you need static IP addresses (NLB gives you one per AZ), sub-millisecond latency, TLS passthrough to backend, or are dealing with non-HTTP protocols.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q3</div>
+        <div>
+          <div class="q-text">Describe how AWS IAM Roles differ from IAM Users, and why roles are preferred for EC2 instances and Lambda functions.</div>
+          <div class="q-tags"><span class="tag easy">Easy</span><span class="tag">IAM</span><span class="tag">Security</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>IAM Users</strong> have permanent long-term credentials (access key + secret). They represent humans or external systems. Storing these on EC2 is a major security risk — if the instance is compromised, the keys are exposed.<br><br>
+          <strong>IAM Roles</strong> have no permanent credentials. Instead, they issue <em>temporary</em> security tokens (via AWS STS) that auto-rotate. When you attach a role to an EC2 instance (Instance Profile), the application can call <code>boto3</code> or the AWS SDK without hardcoding any credentials — it fetches tokens from the <code>169.254.169.254</code> metadata endpoint automatically.<br><br>
+          <strong>Why roles are preferred:</strong>
+          <ul class="ans-list">
+            <li>No credential management overhead</li>
+            <li>Tokens auto-expire — reduces blast radius of a breach</li>
+            <li>Follows the principle of least privilege at the service level</li>
+            <li>Same pattern works across EC2, Lambda, ECS tasks, and EKS pods</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q4</div>
+        <div>
+          <div class="q-text">You need to deploy a FastAPI application on EC2 with zero-downtime deployments. Walk through your architecture.</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">EC2</span><span class="tag">Deployment</span><span class="tag">ALB</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Architecture:</strong>
+          <ul class="ans-list">
+            <li>Place EC2 instances in an <strong>Auto Scaling Group (ASG)</strong> across 2+ AZs</li>
+            <li>Put an <strong>ALB</strong> in front with a Target Group pointing to the ASG</li>
+            <li>Use <strong>Launch Templates</strong> (not Launch Configurations) — easier to version</li>
+          </ul>
+          <strong>Zero-downtime deployment flow:</strong>
+          <ol class="ans-list" style="padding-left:20px">
+            <li>Create a new Launch Template version with the updated AMI or user-data</li>
+            <li>Trigger an <strong>Instance Refresh</strong> on the ASG with a minimum healthy percentage of 50–100%</li>
+            <li>ASG terminates old instances only after new ones pass ALB health checks</li>
+            <li>ALB connection draining (default 300s) ensures in-flight requests complete</li>
+          </ol>
+          <strong>Alternative — Blue/Green:</strong> Spin up a new ASG (Green), register it with a second Target Group, then switch ALB listener rules from Blue TG to Green TG in one atomic operation. This is the pattern I used in my blue-green server migration with Route 53 weighted routing as the cutover mechanism.
+          <div class="tip-box"><strong>Mention your project:</strong> Reference your actual blue-green migration with VPC design, EC2, Route 53, and SSL/TLS — this is direct relevant experience.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q5</div>
+        <div>
+          <div class="q-text">What is S3 Versioning, and how would you use S3 Lifecycle Policies to manage storage costs?</div>
+          <div class="q-tags"><span class="tag easy">Easy</span><span class="tag">S3</span><span class="tag">Cost Optimization</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>S3 Versioning</strong> keeps every version of an object, including all overwrites and deletes (which create a delete marker). Useful for compliance, accidental deletion recovery, and audit trails — relevant for a textile fintech platform storing proposals and pricing data.<br><br>
+          <strong>Lifecycle Policies</strong> automate cost optimization:
+          <ul class="ans-list">
+            <li><strong>Transition rules:</strong> Move objects to cheaper storage tiers over time — e.g., Standard → Standard-IA after 30 days → Glacier Instant Retrieval after 90 days → Glacier Deep Archive after 365 days</li>
+            <li><strong>Expiration rules:</strong> Auto-delete old object versions after N days to prevent version bloat</li>
+            <li><strong>Incomplete multipart uploads:</strong> Auto-abort uploads older than 7 days (often overlooked cost leaker)</li>
+          </ul>
+          For the textile platform, I'd version pricing proposals in S3, transition them to Glacier after 180 days, and delete versions older than 3 years to meet compliance archival requirements at minimal cost.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q6</div>
+        <div>
+          <div class="q-text">Explain RDS Multi-AZ vs Read Replicas. How do they serve different purposes?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">RDS</span><span class="tag">Database</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Multi-AZ</strong> is for <em>High Availability / Disaster Recovery</em>. AWS maintains a synchronous standby replica in a different AZ. If the primary fails, automatic failover happens in ~60–120 seconds with no data loss (RPO=0). The standby is NOT readable — it exists solely for failover.<br><br>
+          <strong>Read Replicas</strong> are for <em>Read Scalability / Performance</em>. They use asynchronous replication (small replication lag). You can have up to 15 read replicas for PostgreSQL. Your app explicitly sends SELECT queries to the replica endpoint. They can be in the same region, cross-region, or even promoted to a standalone DB.<br><br>
+          <strong>Key difference:</strong>
+          <ul class="ans-list">
+            <li>Multi-AZ = passive standby, automatic failover, synchronous replication</li>
+            <li>Read Replica = active readable copy, app-driven, asynchronous, used for offloading analytics or reporting queries</li>
+          </ul>
+          For the textile platform's PostgreSQL, I'd use Multi-AZ for the main transactional DB, and a read replica for the analytics/ESG dashboard queries to avoid impacting OLTP performance.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q7</div>
+        <div>
+          <div class="q-text">How does AWS Auto Scaling work? Explain scaling policies: Target Tracking vs Step Scaling vs Scheduled.</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Auto Scaling</span><span class="tag">EC2</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          Auto Scaling Groups maintain a fleet of EC2 instances between a min/desired/max count, using health checks (EC2 + ALB) to replace unhealthy instances automatically.<br><br>
+          <strong>Target Tracking</strong> — simplest. You say "keep average CPU at 60%". AWS automatically adjusts the fleet to maintain that metric. Equivalent to a thermostat. Best for most production workloads.<br><br>
+          <strong>Step Scaling</strong> — more granular. Define steps: "if CPU > 70%, add 2 instances; if CPU > 90%, add 4 instances". More responsive to sudden spikes but more complex to configure.<br><br>
+          <strong>Scheduled Scaling</strong> — proactive. "Every weekday at 8 AM, set min=10 instances; at 8 PM, set min=2". Perfect for predictable load patterns like business-hours traffic.<br><br>
+          <div class="tip-box"><strong>Your project context:</strong> In your Terraform + Auto Scaling project, you likely used Target Tracking — mention your experience with Launch Templates and ASG via Terraform if relevant.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q8</div>
+        <div>
+          <div class="q-text">What is AWS Secrets Manager vs SSM Parameter Store? Which would you use for storing database credentials in a FastAPI app?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Security</span><span class="tag">Secrets</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>SSM Parameter Store</strong> — free for standard parameters, supports String, StringList, and SecureString (encrypted with KMS). Good for config values, feature flags, non-rotating secrets.<br><br>
+          <strong>Secrets Manager</strong> — paid (~$0.40/secret/month), but adds <em>automatic secret rotation</em> natively integrated with RDS. It also handles the rotation Lambda for you. Best for database passwords, API keys that rotate.<br><br>
+          <strong>For a FastAPI + PostgreSQL app:</strong> I'd use Secrets Manager for DB credentials because of auto-rotation. In FastAPI:
+          <pre><span class="kw">import</span> boto3, json
+
+<span class="fn">def</span> get_db_url():
+    client = boto3.client(<span class="st">'secretsmanager'</span>, region_name=<span class="st">'ap-south-1'</span>)
+    secret = client.get_secret_value(SecretId=<span class="st">'prod/textile-db'</span>)
+    creds = json.loads(secret[<span class="st">'SecretString'</span>])
+    <span class="kw">return</span> <span class="st">f"postgresql://{creds['username']}:{creds['password']}@{creds['host']}/textile"</span></pre>
+          Fetch credentials at app startup (or cache with a TTL) — never hardcode in environment variables.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════ GCP ══════════════════════════════════════════ -->
+  <div class="section" id="gcp">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(56,189,248,.12); color:var(--accent2)">🌐</div>
+      <div>
+        <div class="section-title">Google Cloud Platform (GCP)</div>
+        <div class="section-sub">6 questions · 30 minutes · Compute / GKE / Cloud Run / IAM / BigQuery</div>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q9</div>
+        <div>
+          <div class="q-text">Compare GCP Compute Engine, GKE, Cloud Run, and App Engine. When would you choose each?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">GCP Compute</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <ul class="ans-list">
+            <li><strong>Compute Engine (IaaS)</strong> — Raw VMs. Full control over OS, networking, software. Use when you need custom OS configs, Windows workloads, or lift-and-shift migrations. Highest management overhead.</li>
+            <li><strong>GKE (Google Kubernetes Engine)</strong> — Managed Kubernetes. Use for containerized microservices at scale, complex orchestration needs, multi-container workloads. Middle ground: you manage workloads, GCP manages the control plane.</li>
+            <li><strong>Cloud Run (Serverless containers)</strong> — Runs any container, auto-scales to zero, billed per request. Perfect for stateless HTTP workloads like a FastAPI service. No cluster management. Best cost-efficiency for variable traffic.</li>
+            <li><strong>App Engine</strong> — PaaS, fully managed. Opinionated platform for web apps. Standard env = zero cold start, sandbox; Flexible env = custom runtimes. Use for simple web apps where you want zero infra management.</li>
+          </ul>
+          <div class="tip-box"><strong>For WebSpider's FastAPI:</strong> Cloud Run is the simplest GCP deployment — containerize the FastAPI app, push to Artifact Registry, deploy to Cloud Run with <code>--allow-unauthenticated</code> or behind Cloud Endpoints.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q10</div>
+        <div>
+          <div class="q-text">What is GCP's IAM structure? Explain the difference between Roles, Service Accounts, and Policies.</div>
+          <div class="q-tags"><span class="tag easy">Easy</span><span class="tag">IAM</span><span class="tag">Security</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          GCP IAM follows the model: <strong>Who (identity) can do What (role) on Which resource (policy binding)</strong>.<br><br>
+          <ul class="ans-list">
+            <li><strong>Identities:</strong> Google accounts (human users), Google Groups, Service Accounts (non-human workload identities), Cloud Identity domains</li>
+            <li><strong>Roles:</strong> Collections of permissions. Three types: Primitive (Owner/Editor/Viewer — avoid in prod), Predefined (roles/storage.objectCreator), Custom (create your own)</li>
+            <li><strong>Policy Binding:</strong> Attaches a role to an identity at a resource level (organization → folder → project → resource). Policies are additive — no explicit deny (unlike AWS).</li>
+            <li><strong>Service Accounts:</strong> Identity for GCE instances, Cloud Run, Cloud Functions to authenticate to other GCP services — equivalent to AWS IAM Roles for EC2.</li>
+          </ul>
+          <div class="warn-box">GCP has no explicit deny rules — if a user has a permission at any level, it applies. Plan IAM at the project/folder level carefully.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q11</div>
+        <div>
+          <div class="q-text">How would you deploy a FastAPI container to Cloud Run with a Cloud SQL (PostgreSQL) backend?</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">Cloud Run</span><span class="tag">Cloud SQL</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Step 1: Containerize</strong> — Build a production Docker image for FastAPI (multi-stage, non-root user).
+          <pre><span class="cm"># Cloud Run requires the app to listen on $PORT</span>
+<span class="fn">CMD</span> [<span class="st">"uvicorn"</span>, <span class="st">"main:app"</span>, <span class="st">"--host"</span>, <span class="st">"0.0.0.0"</span>, <span class="st">"--port"</span>, <span class="st">"$PORT"</span>]</pre>
+          <strong>Step 2: Push to Artifact Registry</strong>
+          <pre>gcloud builds submit --tag gcr.io/PROJECT_ID/textile-api</pre>
+          <strong>Step 3: Connect Cloud SQL via Cloud SQL Auth Proxy</strong> — Cloud Run has native Cloud SQL socket support:
+          <pre>gcloud run deploy textile-api \
+  --image gcr.io/PROJECT_ID/textile-api \
+  --add-cloudsql-instances PROJECT:REGION:DB_INSTANCE \
+  --set-env-vars DB_HOST=/cloudsql/PROJECT:REGION:INSTANCE \
+  --service-account=textile-api-sa@PROJECT.iam.gserviceaccount.com</pre>
+          <strong>Step 4: Secret Manager</strong> — Store DB credentials in GCP Secret Manager, mount as env vars in Cloud Run. Grant the service account <code>secretmanager.secretAccessor</code> role.<br><br>
+          Cloud Run auto-scales to zero, so ideal for variable workloads. Use <code>--min-instances=1</code> in production to avoid cold starts.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q12</div>
+        <div>
+          <div class="q-text">What is BigQuery and how does it differ from Cloud SQL for analytical workloads?</div>
+          <div class="q-tags"><span class="tag easy">Easy</span><span class="tag">BigQuery</span><span class="tag">Analytics</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Cloud SQL</strong> — Managed relational DB (PostgreSQL/MySQL). Optimized for OLTP (Online Transaction Processing): many small, fast reads/writes. Row-based storage. Scales vertically.<br><br>
+          <strong>BigQuery</strong> — Serverless, columnar data warehouse. Optimized for OLAP (Online Analytical Processing): large-scale aggregations over billions of rows. No servers to manage — you just run SQL and pay per TB scanned. Scales massively in parallel.<br><br>
+          For the textile platform's <strong>ESG tracking</strong> and <strong>order book analytics</strong>: Cloud SQL handles live transactional data. BigQuery handles historical trend analysis — e.g., "what's our average carbon footprint per yarn type over the last 3 years across all orders?" — a query that would kill a Cloud SQL instance but runs in seconds on BigQuery.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q13</div>
+        <div>
+          <div class="q-text">What is Google Cloud Pub/Sub and when would you use it in a data pipeline?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Pub/Sub</span><span class="tag">Data Pipeline</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Cloud Pub/Sub</strong> is a fully managed, asynchronous messaging service (like AWS SQS + SNS). Publishers send messages to a <em>Topic</em>; Subscribers pull from <em>Subscriptions</em> on that topic. Decouples services, handles backpressure, guarantees at-least-once delivery.<br><br>
+          <strong>Use cases for the textile platform:</strong>
+          <ul class="ans-list">
+            <li>SAP ERP exports arrive → publish to Pub/Sub topic → Dataflow job consumes → loads into BigQuery and Cloud SQL</li>
+            <li>WGSN trend data webhook → Pub/Sub → Cloud Function → updates material recommendations</li>
+            <li>Celery can be replaced by Pub/Sub + Cloud Tasks for GCP-native async task queuing</li>
+          </ul>
+          Pub/Sub is useful when you need to fan out to multiple consumers (e.g., both the pricing engine and ESG tracker react to the same inventory update event).
+        </div>
+      </div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q14</div>
+        <div>
+          <div class="q-text">How does GCP's VPC differ from AWS VPC? What is Shared VPC?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">VPC</span><span class="tag">Networking</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Key differences:</strong>
+          <ul class="ans-list">
+            <li>GCP VPCs are <em>global</em> by default — subnets are regional, but a single VPC spans all regions. In AWS, a VPC is region-scoped.</li>
+            <li>GCP uses <em>Firewall Rules</em> (tag-based or service-account-based) instead of Security Groups + NACLs. Rules are applied at the network level, not the instance level.</li>
+            <li>GCP has no concept of internet gateways — internet access is controlled via route tables and Cloud NAT.</li>
+          </ul>
+          <strong>Shared VPC</strong> — A Host Project owns the VPC; Service Projects share it. This allows centralized network management with IAM-controlled access. Teams deploy resources (VMs, containers) into the shared VPC without managing their own network. Common in enterprises where networking is centralized (Network team manages Shared VPC, dev teams manage their service projects).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ DOCKER ══════════════════════════════════════════ -->
+  <div class="section" id="docker">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(167,139,250,.12); color:var(--accent3)">🐳</div>
+      <div>
+        <div class="section-title">Docker & Containerization</div>
+        <div class="section-sub">7 questions · 35 minutes · Dockerfile / Compose / Networking / Volumes / Optimization</div>
+      </div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q15</div>
+        <div>
+          <div class="q-text">Write an optimized, production-grade Dockerfile for a FastAPI application.</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">Dockerfile</span><span class="tag">Best Practices</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+<pre><span class="cm"># ── Stage 1: Builder ──────────────────────────────────────</span>
+<span class="kw">FROM</span> python:3.11-slim <span class="kw">AS</span> builder
+
+<span class="kw">WORKDIR</span> /app
+<span class="kw">COPY</span> requirements.txt .
+
+<span class="cm"># Install deps into a prefix dir (avoids polluting system)</span>
+<span class="kw">RUN</span> pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+<span class="cm"># ── Stage 2: Runtime ──────────────────────────────────────</span>
+<span class="kw">FROM</span> python:3.11-slim
+
+<span class="cm"># Non-root user for security</span>
+<span class="kw">RUN</span> groupadd -r appuser && useradd -r -g appuser appuser
+
+<span class="kw">WORKDIR</span> /app
+
+<span class="cm"># Copy only installed packages from builder</span>
+<span class="kw">COPY</span> --from=builder /install /usr/local
+<span class="kw">COPY</span> --chown=appuser:appuser . .
+
+<span class="kw">USER</span> appuser
+
+<span class="kw">EXPOSE</span> 8000
+
+<span class="cm"># Gunicorn with Uvicorn workers for production</span>
+<span class="kw">CMD</span> [<span class="st">"gunicorn"</span>, <span class="st">"main:app"</span>, <span class="st">"-k"</span>, <span class="st">"uvicorn.workers.UvicornWorker"</span>,
+     <span class="st">"-w"</span>, <span class="st">"4"</span>, <span class="st">"-b"</span>, <span class="st">"0.0.0.0:8000"</span>, <span class="st">"--timeout"</span>, <span class="st">"120"</span>]</pre>
+          <strong>Why this is optimized:</strong>
+          <ul class="ans-list">
+            <li>Multi-stage build — final image has no build tools (smaller, fewer vulnerabilities)</li>
+            <li><code>python:3.11-slim</code> — minimal base image (~50MB vs 900MB for full Python)</li>
+            <li>Non-root user — follows security best practices</li>
+            <li>Gunicorn + UvicornWorker — production-grade async serving with process management</li>
+            <li><code>--no-cache-dir</code> — avoids storing pip cache in the layer</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q16</div>
+        <div>
+          <div class="q-text">What is Docker layer caching and how do you optimize Dockerfile layer order to maximize cache hits?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Layer Caching</span><span class="tag">Performance</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          Docker caches each instruction as a layer. If an instruction and everything before it is unchanged, Docker reuses the cached layer — drastically speeding up builds. <strong>A cache miss on any layer invalidates all subsequent layers.</strong><br><br>
+          <strong>Key rule:</strong> Put things that change <em>least frequently</em> first, things that change <em>most frequently</em> last.<br><br>
+          <strong>❌ Bad order:</strong>
+<pre><span class="kw">COPY</span> . .                         <span class="cm"># Code changes every commit → invalidates cache</span>
+<span class="kw">RUN</span> pip install -r requirements.txt  <span class="cm"># Re-runs on EVERY code change!</span></pre>
+          <strong>✅ Good order:</strong>
+<pre><span class="kw">COPY</span> requirements.txt .           <span class="cm"># Only changes when deps change</span>
+<span class="kw">RUN</span> pip install -r requirements.txt  <span class="cm"># Cached unless requirements.txt changes</span>
+<span class="kw">COPY</span> . .                         <span class="cm"># App code — changes frequently, but pip already cached</span></pre>
+          This simple reordering can reduce build times from 3 minutes to 10 seconds on a typical Python app.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q17</div>
+        <div>
+          <div class="q-text">Write a docker-compose.yml for the textile platform: FastAPI app + PostgreSQL + Redis (for Celery) + Elasticsearch.</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">Docker Compose</span><span class="tag">Multi-service</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+<pre><span class="fn">version</span>: <span class="st">'3.9'</span>
+
+<span class="fn">services</span>:
+  <span class="fn">api</span>:
+    <span class="fn">build</span>: .
+    <span class="fn">ports</span>: [<span class="st">"8000:8000"</span>]
+    <span class="fn">env_file</span>: .env
+    <span class="fn">depends_on</span>:
+      db:    { condition: service_healthy }
+      redis: { condition: service_started }
+      es:    { condition: service_healthy }
+    <span class="fn">networks</span>: [textile-net]
+    <span class="fn">restart</span>: unless-stopped
+
+  <span class="fn">worker</span>:
+    <span class="fn">build</span>: .
+    <span class="fn">command</span>: celery -A app.celery worker --loglevel=info
+    <span class="fn">env_file</span>: .env
+    <span class="fn">depends_on</span>: [db, redis]
+    <span class="fn">networks</span>: [textile-net]
+
+  <span class="fn">db</span>:
+    <span class="fn">image</span>: postgres:15-alpine
+    <span class="fn">environment</span>:
+      POSTGRES_DB: textile_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    <span class="fn">volumes</span>: [pgdata:/var/lib/postgresql/data]
+    <span class="fn">healthcheck</span>:
+      test: [<span class="st">"CMD"</span>, <span class="st">"pg_isready"</span>, <span class="st">"-U"</span>, <span class="st">"${DB_USER}"</span>]
+      interval: 5s; timeout: 5s; retries: 5
+    <span class="fn">networks</span>: [textile-net]
+
+  <span class="fn">redis</span>:
+    <span class="fn">image</span>: redis:7-alpine
+    <span class="fn">networks</span>: [textile-net]
+
+  <span class="fn">es</span>:
+    <span class="fn">image</span>: elasticsearch:8.11.0
+    <span class="fn">environment</span>:
+      discovery.type: single-node
+      xpack.security.enabled: <span class="st">"false"</span>
+      ES_JAVA_OPTS: <span class="st">"-Xms512m -Xmx512m"</span>
+    <span class="fn">healthcheck</span>:
+      test: [<span class="st">"CMD"</span>, <span class="st">"curl"</span>, <span class="st">"-f"</span>, <span class="st">"http://localhost:9200"</span>]
+    <span class="fn">networks</span>: [textile-net]
+
+<span class="fn">volumes</span>: { pgdata: }
+<span class="fn">networks</span>: { textile-net: }</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q18 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q18</div>
+        <div>
+          <div class="q-text">Explain Docker networking modes: bridge, host, overlay, and none. When would you use each?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Networking</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <ul class="ans-list">
+            <li><strong>Bridge (default)</strong> — Creates a private internal network on the host. Containers on the same bridge network communicate by container name (Docker DNS). Use for single-host multi-container apps (docker-compose default). Port mapping required for external access.</li>
+            <li><strong>Host</strong> — Container shares the host's network namespace directly. No network isolation, no port mapping overhead. Use when performance is critical (e.g., high-throughput network benchmarking) or for privileged monitoring tools. Security risk — don't use for app containers.</li>
+            <li><strong>Overlay</strong> — Multi-host networking for Docker Swarm / Kubernetes. Spans multiple Docker hosts. Containers on different hosts communicate as if on the same LAN. Use in production clusters.</li>
+            <li><strong>None</strong> — Container has no network access. Use for batch jobs that don't need network, or for maximum isolation during security-sensitive processing (e.g., sandboxed code execution).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q19 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q19</div>
+        <div>
+          <div class="q-text">What is a Docker volume vs a bind mount? How do you handle persistent data for a PostgreSQL container in production?</div>
+          <div class="q-tags"><span class="tag easy">Easy</span><span class="tag">Volumes</span><span class="tag">Storage</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Named Volumes</strong> — Managed by Docker, stored in Docker's storage area (<code>/var/lib/docker/volumes/</code>). Portable, easy to backup, not tied to host path structure. <em>Preferred for production databases.</em><br><br>
+          <strong>Bind Mounts</strong> — Maps a specific host directory into the container. Host-dependent, fragile in production. Good for development (mount your source code for hot-reload) but bad for production databases.<br><br>
+          <strong>For PostgreSQL in production:</strong>
+<pre><span class="fn">volumes</span>:
+  pgdata:
+    <span class="fn">driver</span>: local  <span class="cm"># Or use a cloud volume driver like EBS CSI</span>
+
+<span class="fn">db</span>:
+  <span class="fn">image</span>: postgres:15
+  <span class="fn">volumes</span>:
+    - pgdata:/var/lib/postgresql/data  <span class="cm"># Named volume</span></pre>
+          In production on AWS, run RDS instead of PostgreSQL in Docker — managed backups, Multi-AZ, and automatic minor version patching without Docker volume management headaches.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q20</div>
+        <div>
+          <div class="q-text">How would you debug a container that is crashing on startup (CrashLoopBackOff / Exit Code 1)?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Debugging</span><span class="tag">Troubleshooting</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Systematic debugging approach:</strong>
+<pre><span class="cm"># 1. Check the logs before it dies</span>
+docker logs &lt;container_id&gt; --tail=50
+
+<span class="cm"># 2. Override entrypoint to keep it alive, then inspect</span>
+docker run -it --entrypoint /bin/bash my-image
+
+<span class="cm"># 3. Check exit code</span>
+docker inspect &lt;container_id&gt; --format='{{.State.ExitCode}}'
+
+<span class="cm"># 4. Run with --rm and debug mode</span>
+docker run --rm -e DEBUG=true my-image
+
+<span class="cm"># 5. Check resource limits (OOM kill = exit code 137)</span>
+docker stats &lt;container_id&gt;</pre>
+          <strong>Common causes:</strong>
+          <ul class="ans-list">
+            <li>Missing environment variables (DB_URL not set)</li>
+            <li>Port already in use on the host</li>
+            <li>Dependency not ready (database not up yet — use healthchecks + depends_on)</li>
+            <li>Wrong CMD / entrypoint path in Dockerfile</li>
+            <li>OOM kill (exit 137) — increase memory limit or fix memory leak</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q21 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q21</div>
+        <div>
+          <div class="q-text">What are Docker image security best practices? How do you scan for vulnerabilities?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Security</span><span class="tag">Scanning</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <ul class="ans-list">
+            <li><strong>Use minimal base images:</strong> <code>python:3.11-slim</code> or <code>distroless</code> — fewer packages = fewer CVEs</li>
+            <li><strong>Non-root user:</strong> Never run as root inside containers</li>
+            <li><strong>Multi-stage builds:</strong> No build tools or dev dependencies in final image</li>
+            <li><strong>Pin image versions:</strong> Use <code>python:3.11.7-slim</code>, not <code>python:latest</code></li>
+            <li><strong>No secrets in Dockerfiles:</strong> Never use <code>ENV DB_PASS=secret</code> — use runtime env vars or secrets management</li>
+            <li><strong>Read-only filesystems:</strong> <code>docker run --read-only</code> where possible</li>
+          </ul>
+          <strong>Vulnerability scanning:</strong>
+<pre><span class="cm"># Trivy (free, fast)</span>
+trivy image my-textile-api:latest
+
+<span class="cm"># Docker Scout (built into Docker Desktop)</span>
+docker scout cves my-textile-api:latest
+
+<span class="cm"># Integrate in CI (GitHub Actions)</span>
+- uses: aquasecurity/trivy-action@master
+  with: { image-ref: my-image:${{ github.sha }} }</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════ CI/CD ══════════════════════════════════════════ -->
+  <div class="section" id="cicd">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(52,211,153,.12); color:var(--green)">⚙️</div>
+      <div>
+        <div class="section-title">CI/CD Pipelines</div>
+        <div class="section-sub">6 questions · 30 minutes · GitHub Actions / GitLab CI / Deployment Strategies / Terraform</div>
+      </div>
+    </div>
+
+    <!-- Q22 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q22</div>
+        <div>
+          <div class="q-text">Write a complete GitHub Actions workflow that: builds a Docker image, runs tests, pushes to ECR, and deploys to EC2 via SSH.</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">GitHub Actions</span><span class="tag">AWS ECR</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+<pre><span class="fn">name</span>: Deploy Textile API
+
+<span class="fn">on</span>:
+  push:
+    branches: [main]
+
+<span class="fn">jobs</span>:
+  <span class="fn">build-test-deploy</span>:
+    <span class="fn">runs-on</span>: ubuntu-latest
+
+    <span class="fn">steps</span>:
+    - <span class="fn">uses</span>: actions/checkout@v4
+
+    - <span class="fn">name</span>: Configure AWS credentials
+      <span class="fn">uses</span>: aws-actions/configure-aws-credentials@v4
+      <span class="fn">with</span>:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1
+
+    - <span class="fn">name</span>: Login to ECR
+      <span class="fn">id</span>: login-ecr
+      <span class="fn">uses</span>: aws-actions/amazon-ecr-login@v2
+
+    - <span class="fn">name</span>: Build & Test
+      <span class="fn">run</span>: |
+        docker build -t textile-api:test --target builder .
+        docker run --rm textile-api:test pytest tests/ -v
+
+    - <span class="fn">name</span>: Build & Push Production Image
+      <span class="fn">env</span>:
+        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      <span class="fn">run</span>: |
+        docker build -t $REGISTRY/textile-api:$IMAGE_TAG .
+        docker tag $REGISTRY/textile-api:$IMAGE_TAG $REGISTRY/textile-api:latest
+        docker push $REGISTRY/textile-api:$IMAGE_TAG
+        docker push $REGISTRY/textile-api:latest
+
+    - <span class="fn">name</span>: Deploy to EC2
+      <span class="fn">uses</span>: appleboy/ssh-action@master
+      <span class="fn">with</span>:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          aws ecr get-login-password --region ap-south-1 | \
+            docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+          docker pull ${{ steps.login-ecr.outputs.registry }}/textile-api:latest
+          docker-compose up -d --no-deps api</pre>
+          <div class="tip-box"><strong>Production improvement:</strong> Replace SSH deployment with ECS rolling update or Lambda-triggered CodeDeploy for a fully managed zero-downtime deploy.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q23 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q23</div>
+        <div>
+          <div class="q-text">What is the difference between Blue/Green, Canary, and Rolling deployments? When would you use each?</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">Deployment Strategy</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <ul class="ans-list">
+            <li><strong>Rolling:</strong> Gradually replace old instances with new ones. Zero downtime, but both versions run simultaneously during the rollout. Rollback is slow (roll back forward). Best for stateless apps with backward-compatible changes.</li>
+            <li><strong>Blue/Green:</strong> Full parallel environment. Run both Blue (old) and Green (new) simultaneously. Switch traffic all at once (or via weighted routing). Instant rollback — just switch back. Requires 2x infrastructure cost during transition. Best for major releases, database schema changes, or when you need instant rollback.</li>
+            <li><strong>Canary:</strong> Route a small percentage (5–10%) of traffic to the new version. Monitor error rates and latency. Gradually increase traffic if healthy. Limits blast radius of bugs. Best for high-traffic production systems where you want data-driven release confidence.</li>
+          </ul>
+          <div class="tip-box"><strong>Your experience:</strong> You executed Blue/Green migration with Route 53 weighted routing. Mention that — it's textbook canary/blue-green hybrid and directly applicable to this role.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q24 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q24</div>
+        <div>
+          <div class="q-text">How do you manage secrets securely in a GitHub Actions pipeline? What are the common mistakes?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Security</span><span class="tag">Secrets</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Best practices:</strong>
+          <ul class="ans-list">
+            <li>Store secrets in <strong>GitHub Secrets</strong> (Settings → Secrets and variables → Actions) — they are encrypted at rest and masked in logs</li>
+            <li>Use <strong>OIDC (OpenID Connect)</strong> for AWS instead of storing access keys — GitHub Actions can assume an AWS IAM Role via federated identity, zero static credentials</li>
+            <li>Use <strong>environment-scoped secrets</strong> (prod vs staging) with required reviewers on the prod environment</li>
+            <li>Rotate secrets regularly; audit secret access with GitHub's secret scanning alerts</li>
+          </ul>
+          <strong>Common mistakes:</strong>
+          <ul class="ans-list">
+            <li>Echoing secrets in run steps: <code>echo ${{ secrets.DB_PASS }}</code> — even masked, avoid</li>
+            <li>Storing secrets in environment variables at the job level unnecessarily</li>
+            <li>Using long-lived AWS access keys instead of OIDC roles</li>
+            <li>Checking in <code>.env</code> files or <code>terraform.tfvars</code> with real values</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q25 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q25</div>
+        <div>
+          <div class="q-text">Write a Terraform snippet that creates an EC2 instance, an ALB, and an Auto Scaling Group on AWS.</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">Terraform</span><span class="tag">IaC</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+<pre><span class="cm"># Launch Template</span>
+resource <span class="st">"aws_launch_template"</span> <span class="st">"api"</span> {
+  name_prefix   = <span class="st">"textile-api-"</span>
+  image_id      = <span class="st">"ami-0c55b159cbfafe1f0"</span>
+  instance_type = <span class="st">"t3.medium"</span>
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.api.name
+  }
+
+  user_data = base64encode(<span class="st"><<-EOF
+    #!/bin/bash
+    docker pull ${ECR_REGISTRY}/textile-api:latest
+    docker run -d -p 8000:8000 ${ECR_REGISTRY}/textile-api:latest
+  EOF</span>)
+
+  vpc_security_group_ids = [aws_security_group.api.id]
+}
+
+<span class="cm"># Auto Scaling Group</span>
+resource <span class="st">"aws_autoscaling_group"</span> <span class="st">"api"</span> {
+  desired_capacity    = 2
+  max_size            = 6
+  min_size            = 2
+  vpc_zone_identifier = var.private_subnet_ids
+
+  launch_template {
+    id      = aws_launch_template.api.id
+    version = <span class="st">"$Latest"</span>
+  }
+
+  target_group_arns = [aws_lb_target_group.api.arn]
+  health_check_type = <span class="st">"ELB"</span>
+
+  instance_refresh {
+    strategy = <span class="st">"Rolling"</span>
+    preferences { min_healthy_percentage = 50 }
+  }
+}
+
+<span class="cm"># Target Tracking Policy</span>
+resource <span class="st">"aws_autoscaling_policy"</span> <span class="st">"cpu"</span> {
+  autoscaling_group_name = aws_autoscaling_group.api.name
+  policy_type            = <span class="st">"TargetTrackingScaling"</span>
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = <span class="st">"ASGAverageCPUUtilization"</span>
+    }
+    target_value = 60.0
+  }
+}</pre>
+          <div class="tip-box"><strong>Your experience:</strong> You've done Terraform + GitHub Actions CI/CD + Auto Scaling Groups — this is your strongest card. Speak confidently about state files, workspaces, and remote state in S3 + DynamoDB locking.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q26 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q26</div>
+        <div>
+          <div class="q-text">What is GitLab CI/CD and how does it compare to GitHub Actions? Describe the .gitlab-ci.yml structure.</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">GitLab CI</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          Both are YAML-based CI/CD platforms. Key differences:
+          <ul class="ans-list">
+            <li><strong>GitLab CI</strong> is tightly integrated into GitLab — pipelines, repos, container registry, and environments are all in one platform. Runners are self-hosted or GitLab-managed.</li>
+            <li><strong>GitHub Actions</strong> has a massive marketplace ecosystem. Better for open-source. Uses GitHub-hosted runners (ubuntu/windows/macos).</li>
+          </ul>
+          <strong>.gitlab-ci.yml structure:</strong>
+<pre><span class="fn">stages</span>: [test, build, deploy]
+
+<span class="fn">test</span>:
+  <span class="fn">stage</span>: test
+  <span class="fn">image</span>: python:3.11-slim
+  <span class="fn">script</span>:
+    - pip install -r requirements.txt
+    - pytest tests/ --junitxml=report.xml
+  <span class="fn">artifacts</span>:
+    reports: { junit: report.xml }
+
+<span class="fn">build</span>:
+  <span class="fn">stage</span>: build
+  <span class="fn">image</span>: docker:24
+  <span class="fn">services</span>: [docker:24-dind]
+  <span class="fn">script</span>:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+
+<span class="fn">deploy-prod</span>:
+  <span class="fn">stage</span>: deploy
+  <span class="fn">environment</span>: production
+  <span class="fn">only</span>: [main]
+  <span class="fn">script</span>:
+    - <span class="cm"># kubectl apply or docker stack deploy</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q27 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q27</div>
+        <div>
+          <div class="q-text">What is Terraform state and how do you manage it in a team? What is state locking?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Terraform</span><span class="tag">State Management</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Terraform state</strong> (<code>terraform.tfstate</code>) is the source of truth about what infrastructure Terraform has created. It maps your config to real cloud resources. Without state, Terraform can't determine what needs to be changed vs created.<br><br>
+          <strong>Remote state for teams:</strong> Store state in an S3 bucket (never commit it to git — it contains sensitive values):
+<pre>terraform {
+  backend <span class="st">"s3"</span> {
+    bucket         = <span class="st">"textile-terraform-state"</span>
+    key            = <span class="st">"prod/terraform.tfstate"</span>
+    region         = <span class="st">"ap-south-1"</span>
+    encrypt        = true
+    dynamodb_table = <span class="st">"textile-tf-lock"</span>
+  }
+}</pre>
+          <strong>State locking</strong> — When multiple engineers run <code>terraform apply</code> simultaneously, they'd corrupt the state file. DynamoDB is used as a lock table. Terraform writes a lock item before modifying state and deletes it after. If another apply is running, it sees the lock and waits or fails gracefully.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════ WINDOWS SERVER ══════════════════════════════════════════ -->
+  <div class="section" id="windows">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(251,191,36,.12); color:var(--yellow)">🪟</div>
+      <div>
+        <div class="section-title">Windows Server 2022</div>
+        <div class="section-sub">5 questions · 25 minutes · IIS / AD DS / PowerShell / WSUS / RDP / Hyper-V</div>
+      </div>
+    </div>
+
+    <!-- Q28 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q28</div>
+        <div>
+          <div class="q-text">What are the key new features of Windows Server 2022 compared to 2019?</div>
+          <div class="q-tags"><span class="tag easy">Easy</span><span class="tag">Windows Server</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <ul class="ans-list">
+            <li><strong>Secured-core server</strong> — Hardware-based security: UEFI Secure Boot, TPM 2.0, virtualization-based security (VBS), and HVCI (Hypervisor-protected Code Integrity) all enabled by default on certified hardware</li>
+            <li><strong>SMB over QUIC</strong> — File shares accessible over HTTPS-like encrypted tunnels without VPN. Replaces SMB 3.x over TCP for mobile workers</li>
+            <li><strong>TLS 1.3 by default</strong> — All IIS connections default to TLS 1.3; TLS 1.0/1.1 deprecated</li>
+            <li><strong>Azure Arc integration</strong> — Native hybrid management — manage on-prem Windows Server 2022 from Azure Portal</li>
+            <li><strong>Nested virtualization improvements</strong> — Better AMD support for Hyper-V inside VMs</li>
+            <li><strong>Storage improvements</strong> — Storage Spaces Direct performance improvements, compression support in NTFS</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q29 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q29</div>
+        <div>
+          <div class="q-text">Explain Active Directory Domain Services (AD DS). What is the difference between a Domain, Tree, and Forest?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Active Directory</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>AD DS</strong> is Microsoft's directory service that provides centralized authentication (Kerberos/NTLM), authorization, and resource management for Windows environments.<br><br>
+          <ul class="ans-list">
+            <li><strong>Domain</strong> — The basic administrative unit. A collection of objects (users, computers, groups, policies) sharing a common database, security policies, and namespace (e.g., <code>textile.local</code>). Each domain has at least one Domain Controller (DC).</li>
+            <li><strong>Tree</strong> — Multiple domains sharing a contiguous DNS namespace and connected by transitive two-way trusts. E.g., <code>textile.local</code> → <code>sales.textile.local</code> → <code>india.sales.textile.local</code></li>
+            <li><strong>Forest</strong> — The top-level container. A collection of one or more trees sharing a common schema, configuration, and Global Catalog, but NOT necessarily a common namespace. The first domain in a forest is the Forest Root. All domains within a forest implicitly trust each other.</li>
+          </ul>
+          <strong>Group Policy (GPO)</strong> is layered on top: LSDOU order (Local → Site → Domain → OU), with later policies winning.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q30 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q30</div>
+        <div>
+          <div class="q-text">Write PowerShell scripts for: creating AD users in bulk from CSV, and configuring IIS to host a Python web app.</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">PowerShell</span><span class="tag">IIS</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Bulk AD User Creation from CSV:</strong>
+<pre><span class="cm"># users.csv: Name,Username,Department,Password</span>
+Import-Csv -Path <span class="st">"C:\users.csv"</span> | <span class="fn">ForEach-Object</span> {
+    $SecurePass = ConvertTo-SecureString $_.Password -AsPlainText -Force
+    New-ADUser `
+        -Name           $_.Name `
+        -SamAccountName $_.Username `
+        -UserPrincipalName <span class="st">"$($_.Username)@textile.local"</span> `
+        -Department     $_.Department `
+        -AccountPassword $SecurePass `
+        -Enabled        $true `
+        -Path           <span class="st">"OU=Staff,DC=textile,DC=local"</span> `
+        -ChangePasswordAtLogon $true
+    Write-Host <span class="st">"Created: $($_.Username)"</span>
+}</pre>
+          <strong>IIS Reverse Proxy to Python/FastAPI (via ARR):</strong>
+<pre><span class="cm"># Install IIS + ARR + URL Rewrite via PowerShell</span>
+Install-WindowsFeature Web-Server, Web-Mgmt-Tools -IncludeManagementTools
+<span class="cm"># Then configure URL Rewrite rule to proxy :80 → localhost:8000</span>
+Import-Module WebAdministration
+Add-WebConfigurationProperty -PSPath <span class="st">"IIS:\Sites\Default Web Site"</span> `
+    -Filter <span class="st">"system.webServer/rewrite/rules"</span> `
+    -Name <span class="st">"."</span> -Value @{
+        name=<span class="st">"ReverseProxyToFastAPI"</span>
+        enabled=<span class="st">"true"</span>
+        patternSyntax=<span class="st">"Regular Expressions"</span>
+    }</pre>
+          <div class="tip-box">In practice, IIS + Python is rare. More commonly you'd deploy Python on Linux and use IIS as a reverse proxy in a Windows-first org. Mention you'd prefer Nginx on Ubuntu for Python apps.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q31 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q31</div>
+        <div>
+          <div class="q-text">What is WSUS and how do you manage Windows Update in an enterprise environment?</div>
+          <div class="q-tags"><span class="tag easy">Easy</span><span class="tag">WSUS</span><span class="tag">Patch Management</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>WSUS (Windows Server Update Services)</strong> is a free server role that downloads updates from Microsoft and distributes them to clients on your network. Centralizes control over which updates are approved and deployed, reducing internet bandwidth and giving IT control over patch timing.<br><br>
+          <strong>Enterprise WSUS workflow:</strong>
+          <ul class="ans-list">
+            <li>WSUS server syncs with Microsoft Update (scheduled, e.g., nightly)</li>
+            <li>Admins review and <em>approve</em> updates per computer group (e.g., Dev → Test → Production — staggered by weeks)</li>
+            <li>GPO points client machines to the WSUS server (<code>Computer Config → Admin Templates → Windows Components → Windows Update</code>)</li>
+            <li>Clients report compliance; WSUS generates patch status reports</li>
+          </ul>
+          <strong>Modern alternative:</strong> Microsoft Intune + Windows Update for Business (WUfB) for cloud-managed endpoints. WSUS is still prevalent in on-prem enterprise environments.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q32 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q32</div>
+        <div>
+          <div class="q-text">How do you harden a Windows Server 2022 for production? List 8 hardening steps.</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Security Hardening</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <ul class="ans-list">
+            <li><strong>1. Rename/disable built-in Administrator account</strong> — Rename to a non-obvious name; create a separate admin account</li>
+            <li><strong>2. Enable Windows Defender + ATP</strong> — Keep real-time protection on; integrate with Microsoft Defender for Endpoint</li>
+            <li><strong>3. Windows Firewall</strong> — Block all inbound by default; open only required ports (3389 scoped to VPN/jump box IP only)</li>
+            <li><strong>4. Disable unnecessary services</strong> — Disable Print Spooler, Telnet, FTP if not needed; reduce attack surface</li>
+            <li><strong>5. Enforce RDP best practices</strong> — RDP only via VPN/Bastion, use NLA (Network Level Authentication), change default port 3389, enable Account Lockout policy</li>
+            <li><strong>6. Apply CIS Benchmark GPOs</strong> — CIS Level 1 or Microsoft Security Baseline GPOs via Group Policy</li>
+            <li><strong>7. Enable audit logging</strong> — Logon events, privilege use, object access → forward to SIEM (Splunk/Azure Sentinel)</li>
+            <li><strong>8. BitLocker + TPM</strong> — Encrypt all drives; enforce on domain-joined machines via GPO</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════ PYTHON DEVOPS ══════════════════════════════════════════ -->
+  <div class="section" id="pydevops">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(244,63,94,.12); color:#f43f5e">🐍</div>
+      <div>
+        <div class="section-title">Python/FastAPI DevOps & Production</div>
+        <div class="section-sub">5 questions · 35 minutes · FastAPI / Celery / Async / Monitoring / PostgreSQL</div>
+      </div>
+    </div>
+
+    <!-- Q33 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q33</div>
+        <div>
+          <div class="q-text">How would you architect a Celery task queue with Redis for the textile platform's async ETL pipeline (SAP ERP exports)?</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">Celery</span><span class="tag">Redis</span><span class="tag">ETL</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+<pre><span class="cm"># celery_app.py</span>
+<span class="kw">from</span> celery <span class="kw">import</span> Celery
+<span class="kw">from</span> celery.schedules <span class="kw">import</span> crontab
+
+app = Celery(
+    <span class="st">'textile'</span>,
+    broker=<span class="st">'redis://redis:6379/0'</span>,
+    backend=<span class="st">'redis://redis:6379/1'</span>,
+    include=[<span class="st">'tasks.sap_etl'</span>, <span class="st">'tasks.pricing'</span>]
+)
+
+<span class="cm"># Dedicated queues for priority isolation</span>
+app.conf.task_routes = {
+    <span class="st">'tasks.sap_etl.*'</span>: {<span class="st">'queue'</span>: <span class="st">'etl'</span>},
+    <span class="st">'tasks.pricing.*'</span>: {<span class="st">'queue'</span>: <span class="st">'pricing'</span>},
+}
+
+<span class="cm"># Scheduled SAP export processing</span>
+app.conf.beat_schedule = {
+    <span class="st">'process-sap-export'</span>: {
+        <span class="st">'task'</span>: <span class="st">'tasks.sap_etl.process_export'</span>,
+        <span class="st">'schedule'</span>: crontab(hour=<span class="st">'*/2'</span>),  <span class="cm"># every 2 hrs</span>
+    },
+}
+
+<span class="cm"># tasks/sap_etl.py</span>
+@app.task(bind=True, max_retries=3, autoretry_for=(Exception,),
+          retry_backoff=True)
+<span class="kw">def</span> <span class="fn">process_export</span>(self, file_path: str):
+    df = pd.read_excel(file_path)
+    validated = validate_sap_schema(df)
+    upsert_to_postgres(validated)
+    index_to_elasticsearch(validated)</pre>
+          <strong>Production setup:</strong> Run separate Celery workers per queue: <code>celery -A app worker -Q etl -c 4</code> and <code>celery -A app worker -Q pricing -c 2</code>. Use Flower for monitoring: <code>celery flower</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q34 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q34</div>
+        <div>
+          <div class="q-text">How do you implement JWT authentication with refresh tokens in FastAPI? Describe the security model.</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">FastAPI</span><span class="tag">JWT</span><span class="tag">Auth</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+<pre><span class="kw">from</span> fastapi.security <span class="kw">import</span> OAuth2PasswordBearer
+<span class="kw">from</span> jose <span class="kw">import</span> JWTError, jwt
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime, timedelta
+
+SECRET_KEY = <span class="st">"from-secrets-manager"</span>
+ACCESS_TOKEN_EXPIRE = timedelta(minutes=30)
+REFRESH_TOKEN_EXPIRE = timedelta(days=7)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=<span class="st">"/auth/token"</span>)
+
+<span class="kw">def</span> <span class="fn">create_token</span>(data: dict, expires: timedelta) -> str:
+    payload = data.copy()
+    payload[<span class="st">"exp"</span>] = datetime.utcnow() + expires
+    <span class="kw">return</span> jwt.encode(payload, SECRET_KEY, algorithm=<span class="st">"HS256"</span>)
+
+@app.post(<span class="st">"/auth/token"</span>)
+<span class="kw">async def</span> <span class="fn">login</span>(form: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate_user(form.username, form.password)
+    <span class="kw">if not</span> user: <span class="kw">raise</span> HTTPException(401)
+    <span class="kw">return</span> {
+        <span class="st">"access_token"</span>: create_token({<span class="st">"sub"</span>: user.id, <span class="st">"role"</span>: user.role},
+                                      ACCESS_TOKEN_EXPIRE),
+        <span class="st">"refresh_token"</span>: create_token({<span class="st">"sub"</span>: user.id, <span class="st">"type"</span>: <span class="st">"refresh"</span>},
+                                       REFRESH_TOKEN_EXPIRE),
+    }</pre>
+          <strong>Security model:</strong> Access tokens are short-lived (30 min), stored in memory (not localStorage). Refresh tokens are longer-lived (7 days), stored in httpOnly cookies to prevent XSS. Refresh tokens are rotated on each use and stored in Redis for revocation capability. RBAC is embedded in the JWT claims (<code>role: "pricing_manager"</code>) and enforced per endpoint.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q35 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q35</div>
+        <div>
+          <div class="q-text">How would you set up production monitoring and alerting for a FastAPI app on AWS? What metrics matter most?</div>
+          <div class="q-tags"><span class="tag medium">Medium</span><span class="tag">Monitoring</span><span class="tag">Observability</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>Monitoring stack for the textile platform:</strong>
+          <ul class="ans-list">
+            <li><strong>Metrics</strong> — AWS CloudWatch for infrastructure (EC2 CPU, ALB 5xx rate, RDS connections). Application-level metrics via Prometheus + Grafana (request latency, Celery queue depth, active workers)</li>
+            <li><strong>Logs</strong> — FastAPI structured JSON logs → CloudWatch Logs → Log Insights for query. Use <code>structlog</code> library for consistent log format</li>
+            <li><strong>Tracing</strong> — AWS X-Ray or OpenTelemetry to trace requests across FastAPI → PostgreSQL → Elasticsearch → Celery</li>
+            <li><strong>Alerting</strong> — CloudWatch Alarms → SNS → Slack/PagerDuty</li>
+          </ul>
+          <strong>Critical metrics to alert on:</strong>
+          <ul class="ans-list">
+            <li>ALB 5xx error rate > 1% for 5 minutes</li>
+            <li>P99 latency > 2s</li>
+            <li>RDS connection pool exhaustion</li>
+            <li>Celery queue depth > 1000 tasks (ETL backlog)</li>
+            <li>EC2 memory utilization > 85%</li>
+          </ul>
+          FastAPI has a built-in <code>/health</code> endpoint pattern — implement one that checks DB connectivity, Redis ping, and ES cluster health.
+        </div>
+      </div>
+    </div>
+
+    <!-- Q36 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q36</div>
+        <div>
+          <div class="q-text">How do you perform PostgreSQL query optimization? Explain EXPLAIN ANALYZE, indexing strategies, and connection pooling.</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">PostgreSQL</span><span class="tag">Performance</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+          <strong>EXPLAIN ANALYZE</strong> — Shows the actual query execution plan with real timing:
+<pre>EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+SELECT m.*, y.colour_code
+FROM materials m
+JOIN yarn_specs y ON y.material_id = m.id
+WHERE m.fabric_type = 'knit'
+AND m.price_usd BETWEEN 10 AND 50;</pre>
+          Look for: <code>Seq Scan</code> on large tables (bad), <code>Index Scan</code> (good), high <code>actual time</code> nodes, and <code>Rows Removed by Filter</code> (indicates missing index).<br><br>
+          <strong>Indexing strategies for the textile platform:</strong>
+<pre><span class="cm">-- Composite index for common filter pattern</span>
+CREATE INDEX idx_materials_type_price ON materials(fabric_type, price_usd);
+
+<span class="cm">-- GIN index for full-text search</span>
+CREATE INDEX idx_materials_fts ON materials USING GIN(to_tsvector('english', description));
+
+<span class="cm">-- Partial index (only active products)</span>
+CREATE INDEX idx_active_materials ON materials(created_at) WHERE is_active = true;</pre>
+          <strong>Connection pooling with PgBouncer or SQLAlchemy:</strong>
+<pre><span class="cm"># SQLAlchemy async pool settings for FastAPI</span>
+engine = create_async_engine(
+    DATABASE_URL,
+    pool_size=20,       <span class="cm"># Persistent connections</span>
+    max_overflow=10,    <span class="cm"># Burst connections</span>
+    pool_timeout=30,    <span class="cm"># Wait time before error</span>
+    pool_recycle=3600,  <span class="cm"># Recycle connections hourly</span>
+)</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q37 -->
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">Q37</div>
+        <div>
+          <div class="q-text">How do you implement Elasticsearch indexing for fabric/yarn material search with faceted filtering in the textile platform?</div>
+          <div class="q-tags"><span class="tag hard">Hard</span><span class="tag">Elasticsearch</span><span class="tag">Search</span></div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Optimum Answer</div>
+        <div class="answer-body">
+<pre><span class="cm"># Index mapping for material catalog</span>
+mapping = {
+  <span class="st">"mappings"</span>: {
+    <span class="st">"properties"</span>: {
+      <span class="st">"name"</span>:        {<span class="st">"type"</span>: <span class="st">"text"</span>, <span class="st">"analyzer"</span>: <span class="st">"english"</span>},
+      <span class="st">"fabric_type"</span>: {<span class="st">"type"</span>: <span class="st">"keyword"</span>},   <span class="cm"># for facets</span>
+      <span class="st">"colour_code"</span>: {<span class="st">"type"</span>: <span class="st">"keyword"</span>},
+      <span class="st">"price_usd"</span>:   {<span class="st">"type"</span>: <span class="st">"float"</span>},
+      <span class="st">"esg_score"</span>:   {<span class="st">"type"</span>: <span class="st">"integer"</span>},
+      <span class="st">"tags"</span>:        {<span class="st">"type"</span>: <span class="st">"keyword"</span>},
+      <span class="st">"description"</span>: {<span class="st">"type"</span>: <span class="st">"text"</span>}
+    }
+  }
+}
+
+<span class="cm"># Faceted search query</span>
+query = {
+  <span class="st">"query"</span>: {
+    <span class="st">"bool"</span>: {
+      <span class="st">"must"</span>: [{<span class="st">"match"</span>: {<span class="st">"description"</span>: <span class="st">"organic cotton summer"</span>}}],
+      <span class="st">"filter"</span>: [{<span class="st">"range"</span>: {<span class="st">"price_usd"</span>: {<span class="st">"gte"</span>: 5, <span class="st">"lte"</span>: 30}}}]
+    }
+  },
+  <span class="st">"aggs"</span>: {
+    <span class="st">"by_fabric"</span>:  {<span class="st">"terms"</span>: {<span class="st">"field"</span>: <span class="st">"fabric_type"</span>}},
+    <span class="st">"by_colour"</span>:  {<span class="st">"terms"</span>: {<span class="st">"field"</span>: <span class="st">"colour_code"</span>}},
+    <span class="st">"price_range"</span>: {<span class="st">"histogram"</span>: {<span class="st">"field"</span>: <span class="st">"price_usd"</span>, <span class="st">"interval"</span>: 10}}
+  }
+}</pre>
+          <strong>Sync strategy:</strong> After PostgreSQL upsert, publish to a Celery task that updates the ES document. For bulk loads (SAP imports), use the <code>elasticsearch.helpers.bulk()</code> API for 10x throughput vs individual indexing.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  Prepared for Ravan (Ramkrishna Roy Barman) · WebSpider Interview · April 2026
+  <br>Good luck tomorrow. You've got the real project experience — reference it confidently.
+</footer>
+
+</body>
+</html>
