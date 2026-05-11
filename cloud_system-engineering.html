@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Engineer Interview Prep · Ravan</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+  --bg:       #07090f;
+  --s1:       #0d1018;
+  --s2:       #111520;
+  --border:   #1e2535;
+  --border2:  #2a3348;
+  --a1:       #00e5ff;   /* cyan  */
+  --a2:       #7c3aed;   /* violet */
+  --a3:       #f59e0b;   /* amber */
+  --a4:       #10b981;   /* emerald */
+  --a5:       #f43f5e;   /* rose */
+  --text:     #dde4f0;
+  --muted:    #4a5568;
+  --mono:     'Fira Code', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+header {
+  position: relative;
+  padding: 56px 40px 44px;
+  background: var(--s1);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+header::before {
+  content: 'SYS';
+  position: absolute;
+  right: -20px; top: -20px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 220px;
+  color: rgba(0,229,255,.03);
+  pointer-events: none;
+  line-height: 1;
+  user-select: none;
+}
+.grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.hi { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid rgba(0,229,255,.25);
+  background: rgba(0,229,255,.07);
+  color: var(--a1); font-family: var(--mono);
+  font-size: 11px; padding: 4px 13px; border-radius: 999px;
+  letter-spacing: .06em; margin-bottom: 18px;
+}
+.pill::before { content: '▶'; font-size: 7px; animation: blink 1.4s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.2} }
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 5.5vw, 68px);
+  line-height: 1.0;
+  letter-spacing: .02em;
+  color: #fff;
+  margin-bottom: 10px;
+}
+h1 em { color: var(--a1); font-style: normal; }
+
+.sub { color: var(--muted); font-size: 13.5px; max-width: 560px; margin-top: 10px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.chip {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--s2); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 8px 16px; font-size: 12.5px;
+}
+.chip span { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+/* ── TIMELINE BAR ────────────────────────────────────────── */
+.timeline {
+  display: flex; overflow-x: auto;
+  gap: 0; margin: 36px 0 0;
+  border: 1px solid var(--border2); border-radius: 10px; overflow: hidden;
+}
+.tl-block {
+  flex: 1; min-width: 100px;
+  padding: 14px 16px;
+  border-right: 1px solid var(--border2);
+  position: relative;
+}
+.tl-block:last-child { border-right: none; }
+.tl-time { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.tl-topic { font-size: 12px; font-weight: 600; margin-top: 3px; }
+.tl-count { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.tl-bar { height: 3px; border-radius: 999px; margin-top: 10px; }
+
+/* ── MAIN ────────────────────────────────────────────────── */
+main { max-width: 1080px; margin: 0 auto; padding: 44px 40px 80px; }
+
+/* TOC */
+.toc {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px 28px; margin-bottom: 44px;
+}
+.toc-label {
+  font-family: var(--mono); font-size: 10px; color: var(--muted);
+  letter-spacing: .14em; text-transform: uppercase; margin-bottom: 16px;
+}
+.toc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.toc-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 7px;
+  border: 1px solid var(--border2);
+  background: var(--s2); color: var(--text);
+  text-decoration: none; font-size: 12.5px; transition: all .15s;
+}
+.toc-link:hover { border-color: var(--a1); color: var(--a1); }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── SECTION ─────────────────────────────────────────────── */
+.section { margin-bottom: 60px; }
+.sec-hdr {
+  display: flex; align-items: center; gap: 16px;
+  border-bottom: 1px solid var(--border); padding-bottom: 16px;
+  margin-bottom: 28px;
+}
+.sec-ico {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.sec-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: .04em; }
+.sec-meta { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ── CARD ────────────────────────────────────────────────── */
+.card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; margin-bottom: 20px;
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--border2); }
+
+.card-q {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 20px 24px 16px;
+}
+.qn {
+  font-family: var(--mono); font-size: 10px; color: var(--muted);
+  min-width: 28px; padding-top: 3px; flex-shrink: 0;
+}
+.qt { font-weight: 600; font-size: 15px; flex: 1; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.tag {
+  font-family: var(--mono); font-size: 10px;
+  padding: 2px 8px; border-radius: 4px;
+  background: var(--s2); color: var(--muted);
+  border: 1px solid var(--border);
+}
+.tag.h { color:#f87171; border-color:rgba(248,113,113,.3); background:rgba(248,113,113,.06); }
+.tag.m { color:var(--a3); border-color:rgba(245,158,11,.3); background:rgba(245,158,11,.06); }
+.tag.e { color:var(--a4); border-color:rgba(16,185,129,.3); background:rgba(16,185,129,.06); }
+
+.card-a {
+  border-top: 1px solid var(--border);
+  padding: 0 24px 22px 66px;
+}
+.a-label {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10px; color: var(--a4);
+  letter-spacing: .1em; text-transform: uppercase;
+  padding-top: 16px; margin-bottom: 10px;
+}
+.a-label::before { content: '✓'; }
+
+.ab { font-size: 14px; line-height: 1.85; color: #c0cce0; }
+.ab strong { color: var(--text); }
+.ab code {
+  font-family: var(--mono); background: #111827;
+  color: var(--a1); padding: 1px 6px; border-radius: 4px; font-size: 12px;
+}
+.ab ul, .ab ol { padding-left: 20px; margin-top: 6px; }
+.ab li { margin-bottom: 5px; }
+
+pre {
+  background: #0b0e16; border: 1px solid var(--border);
+  border-left: 3px solid var(--a2);
+  border-radius: 0 8px 8px 0; padding: 16px 20px;
+  font-family: var(--mono); font-size: 12px; color: #a5f3fc;
+  overflow-x: auto; margin: 12px 0; line-height: 1.65;
+}
+pre .cm  { color: #374151; font-style: italic; }
+pre .kw  { color: #c084fc; }
+pre .st  { color: #86efac; }
+pre .fn  { color: #fcd34d; }
+pre .num { color: #fb923c; }
+
+.tip {
+  border: 1px solid rgba(0,229,255,.18);
+  border-left: 3px solid var(--a1);
+  background: rgba(0,229,255,.05);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px; margin-top: 14px;
+  font-size: 13px; color: #7dd3fc;
+}
+.tip strong { color: var(--a1); }
+.warn {
+  border: 1px solid rgba(245,158,11,.2);
+  border-left: 3px solid var(--a3);
+  background: rgba(245,158,11,.05);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px; margin-top: 14px;
+  font-size: 13px; color: #fcd34d;
+}
+
+/* ── STRATEGY BOX ────────────────────────────────────────── */
+.strat {
+  background: linear-gradient(135deg, #0a0f1e 0%, #0d1525 100%);
+  border: 1px solid rgba(124,58,237,.3);
+  border-radius: 12px; padding: 28px 32px; margin-bottom: 44px;
+}
+.strat h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px; letter-spacing: .08em; color: var(--a2); margin-bottom: 18px;
+}
+.strat-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 14px; }
+.strat-item {
+  background: rgba(255,255,255,.03); border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px 16px;
+}
+.st-t { font-family: var(--mono); color: var(--a1); font-size: 12px; }
+.st-n { font-size: 13px; font-weight: 600; margin-top: 4px; }
+.st-d { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+footer {
+  text-align: center; padding: 32px;
+  border-top: 1px solid var(--border);
+  color: var(--muted); font-size: 12px;
+  font-family: var(--mono);
+}
+
+@media(max-width:640px){
+  header { padding: 32px 18px 28px; }
+  main { padding: 28px 18px 60px; }
+  .card-a { padding-left: 18px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="grid-bg"></div>
+  <div class="hi">
+    <div class="pill">INTERVIEW PREP · SYSTEM ENGINEER · KOLKATA RAJARHAT</div>
+    <h1>3-HOUR <em>DEVOPS</em><br>INTERVIEW GUIDE</h1>
+    <p class="sub">Tailored for Ravan · System Engineer role · Virtual written format · AWS, GCP, Kubernetes, Docker, CI/CD, Windows Server 2022, on-prem infra & more</p>
+    <div class="chips">
+      <div class="chip">⏱ <span>3 Hours · 40 Questions</span></div>
+      <div class="chip">📍 <span>Rajarhat-Newtown, Kolkata</span></div>
+      <div class="chip">🎯 <span>3–4 Years Experience Band</span></div>
+      <div class="chip">💼 <span>Work From Office · WFO</span></div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-block">
+        <div class="tl-time">0:00–0:40</div>
+        <div class="tl-topic" style="color:#00e5ff">AWS Core</div>
+        <div class="tl-count">Q1–Q7 · 7 Qs</div>
+        <div class="tl-bar" style="background:#00e5ff"></div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-time">0:40–1:05</div>
+        <div class="tl-topic" style="color:#38bdf8">GCP</div>
+        <div class="tl-count">Q8–Q12 · 5 Qs</div>
+        <div class="tl-bar" style="background:#38bdf8"></div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-time">1:05–1:35</div>
+        <div class="tl-topic" style="color:#a78bfa">K8s & Docker</div>
+        <div class="tl-count">Q13–Q20 · 8 Qs</div>
+        <div class="tl-bar" style="background:#a78bfa"></div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-time">1:35–2:00</div>
+        <div class="tl-topic" style="color:#34d399">CI/CD & GitOps</div>
+        <div class="tl-count">Q21–Q26 · 6 Qs</div>
+        <div class="tl-bar" style="background:#34d399"></div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-time">2:00–2:30</div>
+        <div class="tl-topic" style="color:#fbbf24">Windows & Linux</div>
+        <div class="tl-count">Q27–Q33 · 7 Qs</div>
+        <div class="tl-bar" style="background:#fbbf24"></div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-time">2:30–3:00</div>
+        <div class="tl-topic" style="color:#f43f5e">Scripting & On-Prem</div>
+        <div class="tl-count">Q34–Q40 · 7 Qs</div>
+        <div class="tl-bar" style="background:#f43f5e"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- Strategy -->
+<div class="strat">
+  <h3>⚡ EXAM STRATEGY — READ THIS FIRST</h3>
+  <div class="strat-grid">
+    <div class="strat-item">
+      <div class="st-t">STRENGTH #1</div>
+      <div class="st-n">AWS + Terraform</div>
+      <div class="st-d">Your 3-tier app, ASG, ALB, blue-green migration — use these stories everywhere</div>
+    </div>
+    <div class="strat-item">
+      <div class="st-t">STRENGTH #2</div>
+      <div class="st-n">CI/CD GitHub Actions</div>
+      <div class="st-d">Your Terraform + GitHub Actions pipeline is directly mappable to Jenkins + GitLab</div>
+    </div>
+    <div class="strat-item">
+      <div class="st-t">STUDY TONIGHT</div>
+      <div class="st-n">Kubernetes Basics</div>
+      <div class="st-d">Pod/Deployment/Service/Ingress — core objects. EKS vs GKE. kubectl commands</div>
+    </div>
+    <div class="strat-item">
+      <div class="st-t">STUDY TONIGHT</div>
+      <div class="st-n">Argo CD / GitOps</div>
+      <div class="st-d">What it does, App CRD, sync waves, health checks — 2-3 questions likely</div>
+    </div>
+    <div class="strat-item">
+      <div class="st-t">STUDY TONIGHT</div>
+      <div class="st-n">FortiGate + NAS</div>
+      <div class="st-d">On-prem firewall policies, VPN types, NAS backup strategies</div>
+    </div>
+    <div class="strat-item">
+      <div class="st-t">ALWAYS DO THIS</div>
+      <div class="st-n">Reference Projects</div>
+      <div class="st-d">Answers from real experience beat memorised theory — cite specific numbers</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-label">Quick Navigation</div>
+  <div class="toc-row">
+    <a class="toc-link" href="#aws"><span class="dot" style="background:#00e5ff"></span>AWS (Q1–Q7)</a>
+    <a class="toc-link" href="#gcp"><span class="dot" style="background:#38bdf8"></span>GCP (Q8–Q12)</a>
+    <a class="toc-link" href="#k8s"><span class="dot" style="background:#a78bfa"></span>Kubernetes & Docker (Q13–Q20)</a>
+    <a class="toc-link" href="#cicd"><span class="dot" style="background:#34d399"></span>CI/CD & GitOps (Q21–Q26)</a>
+    <a class="toc-link" href="#sysadmin"><span class="dot" style="background:#fbbf24"></span>Windows & Linux (Q27–Q33)</a>
+    <a class="toc-link" href="#scripting"><span class="dot" style="background:#f43f5e"></span>Scripting & On-Prem (Q34–Q40)</a>
+  </div>
+</div>
+
+
+<!-- ═══════════════════ AWS ═══════════════════ -->
+<div class="section" id="aws">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:rgba(0,229,255,.1);color:var(--a1)">☁️</div>
+    <div>
+      <div class="sec-title">Amazon Web Services</div>
+      <div class="sec-meta">7 questions · 40 min · EC2 / VPC / EKS / Lambda / RDS / Aurora / IoT / Cost</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q1</div>
+      <div>
+        <div class="qt">Explain the full AWS VPC architecture you would design for a production multi-tier application. Include subnets, routing, NAT, and security layers.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">VPC</span><span class="tag">Networking</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>VPC design (production-grade, 2 AZs minimum):</strong><br><br>
+        <strong>Subnet layout per AZ:</strong>
+        <ul>
+          <li><strong>Public subnet</strong> (e.g., 10.0.1.0/24): ALB, NAT Gateway, Bastion host only. Route table: 0.0.0.0/0 → Internet Gateway.</li>
+          <li><strong>Private App subnet</strong> (e.g., 10.0.10.0/24): EC2/EKS nodes, app servers. Route table: 0.0.0.0/0 → NAT Gateway (outbound only).</li>
+          <li><strong>Private DB subnet</strong> (e.g., 10.0.20.0/24): RDS, Aurora, ElastiCache. No internet route at all. Only app subnet SG can reach port 5432/3306.</li>
+        </ul>
+        <strong>Key components:</strong>
+        <ul>
+          <li><strong>Internet Gateway (IGW)</strong>: Attached to VPC, used by public subnets only</li>
+          <li><strong>NAT Gateway</strong>: One per AZ (for HA) in the public subnet — allows private instances to pull updates/packages without being publicly reachable</li>
+          <li><strong>Security Groups</strong>: Stateful, instance-level — ALB SG allows 80/443 from 0.0.0.0/0; App SG allows 8000 from ALB SG only; DB SG allows 5432 from App SG only</li>
+          <li><strong>NACLs</strong>: Stateless subnet-level — use to block known malicious CIDRs</li>
+          <li><strong>VPC Flow Logs</strong>: Enable on all subnets, send to CloudWatch Logs / S3 for audit</li>
+          <li><strong>VPC Endpoints</strong>: S3 and DynamoDB gateway endpoints — keep S3 traffic inside AWS backbone, not through NAT (cost + security)</li>
+        </ul>
+        <div class="tip"><strong>Your real experience:</strong> Reference your 3-tier compliance app VPC design and blue-green migration with this exact layout. Mention specific CIDR blocks you used.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q2</div>
+      <div>
+        <div class="qt">What is AWS EKS? How does it differ from ECS and self-managed Kubernetes? How do you provision an EKS cluster with managed node groups?</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">EKS</span><span class="tag">Kubernetes</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>EKS (Elastic Kubernetes Service)</strong> — AWS-managed Kubernetes control plane. You pay for the control plane ($0.10/hr); AWS handles etcd, API server HA, and control plane upgrades. You manage worker nodes (EC2 Managed Node Groups or Fargate).<br><br>
+        <strong>EKS vs ECS vs self-managed K8s:</strong>
+        <ul>
+          <li><strong>ECS</strong>: AWS-proprietary container orchestrator. Simpler, no YAML manifests, tightly integrated with AWS. No portability. Choose ECS for AWS-only, simpler workloads.</li>
+          <li><strong>EKS</strong>: Standard Kubernetes — portable, ecosystem (Helm, Argo CD, Prometheus). More complex but industry-standard. Choose for microservices, multi-cloud roadmap, existing K8s expertise.</li>
+          <li><strong>Self-managed K8s</strong>: You run kubeadm on EC2. Full control, no SLA from AWS on control plane. Only for very specific compliance needs.</li>
+        </ul>
+        <strong>Provisioning EKS with Terraform:</strong>
+        <pre><span class="kw">module</span> <span class="st">"eks"</span> {
+  source  = <span class="st">"terraform-aws-modules/eks/aws"</span>
+  version = <span class="st">"~> 20.0"</span>
+
+  cluster_name    = <span class="st">"prod-cluster"</span>
+  cluster_version = <span class="st">"1.29"</span>
+  vpc_id          = module.vpc.vpc_id
+  subnet_ids      = module.vpc.private_subnets
+
+  eks_managed_node_groups = {
+    app = {
+      instance_types = [<span class="st">"t3.medium"</span>]
+      min_size       = <span class="num">2</span>
+      max_size       = <span class="num">6</span>
+      desired_size   = <span class="num">2</span>
+    }
+  }
+  <span class="cm"># Enable IRSA for pod-level IAM roles</span>
+  enable_irsa = true
+}</pre>
+        After provisioning: <code>aws eks update-kubeconfig --name prod-cluster --region ap-south-1</code> then <code>kubectl get nodes</code> to verify.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q3</div>
+      <div>
+        <div class="qt">Explain RDS Aurora vs standard RDS PostgreSQL. When would you choose Aurora over RDS?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">RDS</span><span class="tag">Aurora</span><span class="tag">Database</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Standard RDS PostgreSQL</strong>: Managed single EC2 instance running PostgreSQL. Multi-AZ = synchronous standby replica (failover ~60s). Read replicas = asynchronous. Storage provisioned and scaled manually (up to 64TB). Familiar tuning, straightforward pricing.<br><br>
+        <strong>Aurora PostgreSQL</strong>: Cloud-native re-architecture. Storage layer is distributed across 6 copies in 3 AZs automatically — separate from compute. Key differences:
+        <ul>
+          <li><strong>Storage auto-scales</strong> from 10GB to 128TB in 10GB increments — no provisioning</li>
+          <li><strong>Faster failover</strong>: ~30 seconds (vs 60–120s for RDS Multi-AZ) because the replica already has the same distributed storage</li>
+          <li><strong>Up to 15 read replicas</strong> with near-zero replication lag (all share same storage layer)</li>
+          <li><strong>Aurora Serverless v2</strong>: Auto-scales compute capacity from 0.5 to 128 ACUs in seconds — perfect for variable workloads</li>
+          <li><strong>Higher cost</strong>: ~20% more than equivalent RDS, but often worth it for HA requirements</li>
+        </ul>
+        <strong>Choose Aurora when:</strong> you need sub-30s failover, auto-storage scaling, or >5 read replicas. Choose standard RDS when: budget is tight, simpler workloads, or specific PostgreSQL version/extension compatibility matters.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q4</div>
+      <div>
+        <div class="qt">What is AWS Lambda? Describe how you would use Lambda in an event-driven architecture for processing S3 file uploads.</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Lambda</span><span class="tag">Serverless</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>AWS Lambda</strong> is a serverless compute service — you upload code, Lambda runs it in response to events, scales to zero when idle, bills per 100ms of execution. No servers to patch or manage.<br><br>
+        <strong>S3 → Lambda event-driven pipeline:</strong>
+        <ul>
+          <li>User/system uploads a file to <code>s3://raw-uploads/</code></li>
+          <li>S3 Event Notification triggers the Lambda function on <code>s3:ObjectCreated:*</code></li>
+          <li>Lambda receives the event, reads the S3 object, processes it (validate, transform, enrich)</li>
+          <li>Lambda writes output to <code>s3://processed/</code> AND inserts a record into RDS/DynamoDB</li>
+          <li>On failure: Lambda sends message to SQS Dead Letter Queue (DLQ) for retry</li>
+        </ul>
+        <pre><span class="kw">import</span> boto3, json
+
+<span class="kw">def</span> <span class="fn">handler</span>(event, context):
+    s3 = boto3.client(<span class="st">'s3'</span>)
+    <span class="kw">for</span> record <span class="kw">in</span> event[<span class="st">'Records'</span>]:
+        bucket = record[<span class="st">'s3'</span>][<span class="st">'bucket'</span>][<span class="st">'name'</span>]
+        key    = record[<span class="st">'s3'</span>][<span class="st">'object'</span>][<span class="st">'key'</span>]
+        obj    = s3.get_object(Bucket=bucket, Key=key)
+        data   = obj[<span class="st">'Body'</span>].read()
+        process_and_store(data)
+    <span class="kw">return</span> {<span class="st">'statusCode'</span>: <span class="num">200</span>}</pre>
+        <strong>Key Lambda settings for production</strong>: Memory (128MB–10GB, directly affects CPU too), Timeout (max 15 min), Concurrency limits (reserve concurrency to prevent DB connection exhaustion), and Layers for shared dependencies.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q5</div>
+      <div>
+        <div class="qt">What is AWS IoT Core? Describe its architecture: devices, MQTT, Rules Engine, and integration with other AWS services.</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">AWS IoT</span><span class="tag">MQTT</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>AWS IoT Core</strong> is a managed cloud service that lets connected devices (sensors, machines, edge devices) communicate with AWS services securely at scale without managing broker infrastructure.<br><br>
+        <strong>Architecture components:</strong>
+        <ul>
+          <li><strong>Device SDK</strong>: Runs on device (Python, C, Node.js). Handles TLS mutual auth and MQTT protocol</li>
+          <li><strong>Message Broker</strong>: MQTT broker in the cloud. Devices publish to topics (e.g., <code>factory/machine-01/temp</code>). Other devices or backend can subscribe</li>
+          <li><strong>Device Registry</strong>: Catalog of all registered things with metadata and attributes</li>
+          <li><strong>Device Shadow</strong>: JSON document representing last known state of a device — even when device is offline, you can read/update the shadow</li>
+          <li><strong>Rules Engine</strong>: SQL-like rules that trigger actions on messages matching a topic. E.g., "if temperature > 80°C → invoke Lambda + write to DynamoDB + send SNS alert"</li>
+        </ul>
+        <strong>Integration flow:</strong> Device → MQTT over TLS → IoT Core Broker → Rules Engine → Lambda / DynamoDB / Kinesis / S3 / CloudWatch<br><br>
+        Security model: X.509 certificates per device (mutual TLS), IoT Policies (like IAM policies) scoped per device.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q6</div>
+      <div>
+        <div class="qt">How do you approach cloud cost optimization on AWS? Give specific techniques for compute, storage, and data transfer.</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Cost Optimization</span><span class="tag">FinOps</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Compute:</strong>
+        <ul>
+          <li><strong>Reserved Instances / Savings Plans</strong>: 1–3 year commitment saves 40–72% vs On-Demand. Use for steady baseline load</li>
+          <li><strong>Spot Instances</strong>: 70–90% discount for fault-tolerant workloads (batch jobs, Celery workers, CI/CD runners)</li>
+          <li><strong>Right-sizing</strong>: Use AWS Compute Optimizer recommendations. Most orgs are over-provisioned by 2–3x. Check CloudWatch CPU/memory over 14 days</li>
+          <li><strong>Auto Scaling + scheduled scaling</strong>: Scale down to minimum outside business hours</li>
+        </ul>
+        <strong>Storage:</strong>
+        <ul>
+          <li><strong>S3 Intelligent-Tiering</strong>: Auto-moves objects to cheaper tiers if not accessed for 30 days</li>
+          <li><strong>EBS volume cleanup</strong>: Delete unattached EBS volumes and unused snapshots (common cost leak)</li>
+          <li><strong>S3 Lifecycle policies</strong>: Transition to Glacier Deep Archive after 90 days for archival data</li>
+        </ul>
+        <strong>Data Transfer:</strong>
+        <ul>
+          <li><strong>VPC Endpoints</strong>: S3/DynamoDB gateway endpoints eliminate NAT Gateway data processing charges for S3 traffic</li>
+          <li><strong>CloudFront</strong>: Reduces origin data transfer cost by caching at edge</li>
+          <li><strong>Keep traffic same-AZ</strong>: Cross-AZ data transfer costs $0.01/GB each way — place compute near data</li>
+        </ul>
+        <div class="tip"><strong>Tools:</strong> AWS Cost Explorer, AWS Budgets with alerts, Trusted Advisor, Infracost (in Terraform CI/CD to flag cost increases before apply).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q7</div>
+      <div>
+        <div class="qt">Describe a disaster recovery strategy on AWS. Explain RTO/RPO and the difference between Pilot Light, Warm Standby, and Multi-Site Active-Active.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Disaster Recovery</span><span class="tag">HA</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>RTO</strong> (Recovery Time Objective): How long you can be down. <strong>RPO</strong> (Recovery Point Objective): How much data loss is acceptable.<br><br>
+        <ul>
+          <li><strong>Backup & Restore</strong>: Cheapest. Periodic snapshots to S3 Glacier. RTO: hours. RPO: hours. Use for non-critical systems.</li>
+          <li><strong>Pilot Light</strong>: Core services (DB) always running in DR region, but minimal compute. On disaster: scale up compute from AMIs, point DNS to DR. RTO: 30–60 min. RPO: minutes (depends on replication lag).</li>
+          <li><strong>Warm Standby</strong>: Scaled-down but fully functional environment always running in DR. On disaster: scale up to production size. RTO: minutes. RPO: seconds.</li>
+          <li><strong>Multi-Site Active-Active</strong>: Full production capacity in 2+ regions simultaneously. Traffic split via Route 53 latency/geolocation routing. On failure: Route 53 health checks redirect 100% traffic to healthy region. RTO: near-zero. RPO: near-zero. Most expensive.</li>
+        </ul>
+        <strong>For most production workloads:</strong> Warm Standby with Aurora Global Database (cross-region replication with ~1s lag) is the best cost/RTO balance. RDS automated backups (35-day retention) + cross-region snapshot copy for RPO protection.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /aws -->
+
+
+<!-- ═══════════════════ GCP ═══════════════════ -->
+<div class="section" id="gcp">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:rgba(56,189,248,.1);color:#38bdf8">🌐</div>
+    <div>
+      <div class="sec-title">Google Cloud Platform</div>
+      <div class="sec-meta">5 questions · 25 min · Compute Engine / GKE / Cloud Run / Cloud SQL / Cloud Storage / Monitoring</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q8</div>
+      <div>
+        <div class="qt">Compare GKE (Google Kubernetes Engine) with AWS EKS. What unique features does GKE offer?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">GKE</span><span class="tag">Kubernetes</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        Both are managed Kubernetes control planes. Key comparison:
+        <ul>
+          <li><strong>GKE Autopilot</strong>: Google manages not just the control plane but ALSO the nodes — you just deploy pods, pay per pod resource usage. No node group management. EKS has no equivalent (Fargate is close but less seamless).</li>
+          <li><strong>Cluster upgrades</strong>: GKE has Release Channels (Rapid/Regular/Stable) — auto-upgrades with controlled rollout. EKS upgrades are more manual (you trigger control plane upgrade, then separately upgrade node groups).</li>
+          <li><strong>Networking</strong>: GKE uses VPC-native networking by default — pod IPs are real VPC IPs (no overlay needed). EKS requires the AWS VPC CNI plugin, and pod IP density per node is limited by ENI limits.</li>
+          <li><strong>Workload Identity</strong>: GKE's equivalent of IRSA — maps K8s ServiceAccounts to GCP Service Accounts for pod-level IAM without static credentials.</li>
+          <li><strong>Cost</strong>: GKE charges $0.10/hr for the control plane (same as EKS). Autopilot mode can be cheaper for variable workloads.</li>
+        </ul>
+        <strong>GKE is generally considered more developer-friendly and has tighter Kubernetes integration. EKS has better AWS ecosystem integration (IAM, ALB controller, etc.).</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q9</div>
+      <div>
+        <div class="qt">How do you deploy a containerised application to Cloud Run and connect it to Cloud SQL? What are Cloud Run's concurrency and scaling model?</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Cloud Run</span><span class="tag">Cloud SQL</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Deployment:</strong>
+        <pre><span class="cm"># Build and push to Artifact Registry</span>
+gcloud builds submit --tag gcr.io/PROJECT/myapp
+
+<span class="cm"># Deploy to Cloud Run with Cloud SQL connection</span>
+gcloud run deploy myapp \
+  --image gcr.io/PROJECT/myapp \
+  --platform managed \
+  --region asia-south1 \
+  --add-cloudsql-instances PROJECT:asia-south1:mydb \
+  --set-env-vars DB_HOST=/cloudsql/PROJECT:asia-south1:mydb \
+  --set-secrets DB_PASS=db-password:latest \
+  --service-account myapp-sa@PROJECT.iam.gserviceaccount.com \
+  --min-instances 1 \
+  --max-instances 20 \
+  --concurrency 80</pre>
+        <strong>Cloud Run Scaling Model:</strong>
+        <ul>
+          <li><strong>Concurrency</strong>: Each container instance handles up to N requests simultaneously (default 80, max 1000). Unlike Lambda (1 request per container), Cloud Run can handle multiple concurrent requests per instance.</li>
+          <li><strong>Scaling</strong>: Cloud Run scales instances based on incoming requests. With <code>--min-instances 0</code> it scales to zero (cold starts). With <code>--min-instances 1</code> always one warm instance.</li>
+          <li><strong>CPU allocation</strong>: Default is CPU only allocated during request processing. Use <code>--cpu-always-on</code> for background work (Celery-like patterns).</li>
+        </ul>
+        Cloud SQL Auth Proxy runs as a sidecar in Cloud Run automatically when you use <code>--add-cloudsql-instances</code> — handles TLS connection without managing the proxy yourself.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q10</div>
+      <div>
+        <div class="qt">What is Cloud Storage and how do GCP Storage Classes work? How does it compare to AWS S3?</div>
+        <div class="tags"><span class="tag e">Easy</span><span class="tag">Cloud Storage</span><span class="tag">GCP</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>GCP Cloud Storage</strong> is GCP's object storage — analogous to S3. Objects stored in buckets. Globally unique bucket names. Strong consistency (unlike S3's eventual consistency era — both are now strongly consistent).<br><br>
+        <strong>Storage Classes:</strong>
+        <ul>
+          <li><strong>Standard</strong>: Hot data, frequent access. Highest storage cost, no retrieval cost.</li>
+          <li><strong>Nearline</strong>: Access &lt;1/month. 30-day minimum. Retrieval cost applies.</li>
+          <li><strong>Coldline</strong>: Access &lt;1/quarter. 90-day minimum. Higher retrieval cost.</li>
+          <li><strong>Archive</strong>: &lt;1/year access. 365-day minimum. Lowest storage, highest retrieval cost.</li>
+        </ul>
+        Use <strong>Object Lifecycle Management</strong> to auto-transition objects between classes (just like S3 Lifecycle Policies).<br><br>
+        <strong>vs AWS S3:</strong> Functionally equivalent. GCP has no S3 Glacier equivalent (Archive class fills that role). GCP has stronger IAM integration. S3 has more ecosystem tooling (AWS Data Sync, Transfer Acceleration). Both support versioning, signed URLs, and event notifications (GCP → Pub/Sub; S3 → SNS/Lambda).
+      </div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q11</div>
+      <div>
+        <div class="qt">How does GCP Cloud Monitoring and Logging work? How do you set up alerts and integrate with Elasticsearch/Kibana?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Monitoring</span><span class="tag">Logging</span><span class="tag">ELK</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>GCP Cloud Monitoring</strong>: Collects metrics from GCP resources (CPU, memory, request latency, error rates) and custom metrics via the Monitoring API or OpenTelemetry. Dashboards, uptime checks, and SLO monitoring built-in.<br><br>
+        <strong>GCP Cloud Logging</strong>: Centralized log management. All GCP services emit logs automatically. Log Router can export to Cloud Storage (archival), BigQuery (analytics), Pub/Sub (streaming).<br><br>
+        <strong>Alerting setup:</strong>
+        <ul>
+          <li>Create an Alert Policy: choose metric → set threshold (e.g., HTTP 5xx rate > 1% for 5 min) → configure notification channels (email, Slack via Webhook, PagerDuty)</li>
+        </ul>
+        <strong>Integrating with Elasticsearch/Kibana (ELK):</strong>
+        <ul>
+          <li>Log Router sinks logs to Pub/Sub topic</li>
+          <li>Logstash Pub/Sub input plugin (or custom consumer) reads from Pub/Sub</li>
+          <li>Logstash parses/filters → outputs to Elasticsearch index</li>
+          <li>Kibana connects to Elasticsearch for dashboards and search</li>
+        </ul>
+        Alternatively, use <strong>Elastic Agent</strong> running on GCE VMs to ship logs directly to Elasticsearch Cloud.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q12</div>
+      <div>
+        <div class="qt">What is Acquia Cloud and how does it fit into a PHP/Drupal hosting architecture?</div>
+        <div class="tags"><span class="tag e">Easy</span><span class="tag">Acquia</span><span class="tag">Drupal</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Acquia Cloud</strong> is a managed cloud hosting platform specifically built for Drupal applications. It's built on AWS infrastructure but abstracts away AWS complexity and adds Drupal-specific tooling.<br><br>
+        <strong>Architecture:</strong>
+        <ul>
+          <li><strong>Web tier</strong>: Load-balanced Apache + PHP-FPM servers with Drupal docroot. Multi-server HA by default.</li>
+          <li><strong>Database tier</strong>: MySQL with hot standby replication (Percona XtraDB Cluster in Enterprise)</li>
+          <li><strong>File system</strong>: Distributed GlusterFS for shared Drupal files (sites/default/files) across web nodes</li>
+          <li><strong>Varnish cache</strong>: CDN/reverse proxy in front of web tier</li>
+          <li><strong>Acquia Cloud IDE + Acquia CLI</strong>: Development and deployment tooling</li>
+        </ul>
+        <strong>CI/CD integration</strong>: GitHub/GitLab → Acquia Pipelines (or external CI) → <code>acli push:artifact</code> to deploy to Acquia Cloud environments (Dev/Stage/Prod). Code, database, and files can be synchronized between environments.<br><br>
+        <div class="tip">Even if you haven't used Acquia directly, your Apache + PHP + MySQL + web server administration experience is directly applicable. Mention that.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /gcp -->
+
+
+<!-- ═══════════════════ K8s & DOCKER ═══════════════════ -->
+<div class="section" id="k8s">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:rgba(124,58,237,.12);color:var(--a2)">⚓</div>
+    <div>
+      <div class="sec-title">Kubernetes & Docker</div>
+      <div class="sec-meta">8 questions · 30 min · Core Objects / Argo CD / Helm / Networking / Production Patterns</div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q13</div>
+      <div>
+        <div class="qt">Explain the core Kubernetes objects: Pod, Deployment, Service, Ingress, ConfigMap, and Secret. How do they relate?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">K8s Objects</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <ul>
+          <li><strong>Pod</strong>: Smallest deployable unit. One or more containers sharing network namespace and volumes. Never create Pods directly in production — use Deployments.</li>
+          <li><strong>Deployment</strong>: Manages a ReplicaSet (desired number of Pod replicas). Handles rolling updates and rollbacks. <code>kubectl rollout undo deployment/myapp</code> to revert.</li>
+          <li><strong>Service</strong>: Stable network endpoint for a group of Pods (selected by label). Types: ClusterIP (internal), NodePort, LoadBalancer (creates cloud LB), ExternalName. Pods come and go; Service IP stays constant.</li>
+          <li><strong>Ingress</strong>: HTTP/HTTPS routing rules at layer 7. Maps paths/hostnames to Services. Requires an Ingress Controller (nginx-ingress, AWS ALB Ingress Controller). E.g., <code>api.company.com → service:api:8000</code></li>
+          <li><strong>ConfigMap</strong>: Non-sensitive config data (env vars, config files) injected into Pods. Decouples config from container image.</li>
+          <li><strong>Secret</strong>: Base64-encoded (NOT encrypted by default — use Sealed Secrets or External Secrets Operator in production) sensitive data. Same injection mechanisms as ConfigMap.</li>
+        </ul>
+        <strong>Relationship:</strong> Ingress → Service → Deployment → ReplicaSet → Pods. ConfigMap/Secret injected into Pods as env vars or volume mounts.
+        <div class="warn">Kubernetes Secrets are only base64 encoded by default, NOT encrypted at rest. Use AWS Secrets Manager + External Secrets Operator or Sealed Secrets for production.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q14</div>
+      <div>
+        <div class="qt">What is Argo CD and how does it implement GitOps? Explain the Application CRD, sync policies, and health checks.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Argo CD</span><span class="tag">GitOps</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>GitOps principle</strong>: Git is the single source of truth for desired cluster state. Changes are made via PRs to Git; an operator (Argo CD) continuously reconciles actual cluster state to match Git.<br><br>
+        <strong>Argo CD Application CRD:</strong>
+        <pre><span class="fn">apiVersion</span>: argoproj.io/v1alpha1
+<span class="fn">kind</span>: Application
+<span class="fn">metadata</span>:
+  name: myapp
+  namespace: argocd
+<span class="fn">spec</span>:
+  <span class="fn">project</span>: default
+  <span class="fn">source</span>:
+    repoURL: https://github.com/org/infra-repo
+    targetRevision: main
+    path: k8s/overlays/prod   <span class="cm"># Kustomize or Helm path</span>
+  <span class="fn">destination</span>:
+    server: https://kubernetes.default.svc
+    namespace: production
+  <span class="fn">syncPolicy</span>:
+    automated:
+      prune: true      <span class="cm"># Delete resources removed from Git</span>
+      selfHeal: true   <span class="cm"># Revert manual kubectl changes</span>
+    syncOptions:
+      - CreateNamespace=true</pre>
+        <strong>Sync policies:</strong>
+        <ul>
+          <li><strong>Manual sync</strong>: Argo CD shows diff, you click sync manually (safer for prod)</li>
+          <li><strong>Automated sync</strong>: Argo CD polls git (every 3 min) or gets webhook trigger and auto-applies changes</li>
+          <li><strong>Sync Waves</strong>: Annotate resources with <code>argocd.argoproj.io/sync-wave: "1"</code> to control order (e.g., deploy DB migrations before app)</li>
+        </ul>
+        <strong>Health checks</strong>: Argo CD has built-in health assessments for Deployments (checks rollout status), Services, Ingresses, PVCs etc. Custom health checks via Lua scripts for CRDs.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q15</div>
+      <div>
+        <div class="qt">Write a production-grade Kubernetes Deployment manifest with resource limits, liveness/readiness probes, and HPA.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Deployment YAML</span><span class="tag">HPA</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <pre><span class="fn">apiVersion</span>: apps/v1
+<span class="fn">kind</span>: Deployment
+<span class="fn">metadata</span>:
+  name: api-server
+  namespace: production
+<span class="fn">spec</span>:
+  replicas: 3
+  selector:
+    matchLabels: { app: api-server }
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }
+  <span class="fn">template</span>:
+    metadata:
+      labels: { app: api-server }
+    <span class="fn">spec</span>:
+      containers:
+      - name: api
+        image: gcr.io/project/api:v1.2.3   <span class="cm"># Always pin tags</span>
+        ports:
+        - containerPort: 8000
+        <span class="fn">resources</span>:
+          requests: { cpu: 250m, memory: 256Mi }
+          limits:   { cpu: 500m, memory: 512Mi }
+        <span class="fn">livenessProbe</span>:
+          httpGet: { path: /health, port: 8000 }
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          failureThreshold: 3
+        <span class="fn">readinessProbe</span>:
+          httpGet: { path: /ready, port: 8000 }
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        <span class="fn">envFrom</span>:
+        - configMapRef:  { name: api-config }
+        - secretRef:     { name: api-secrets }
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels: { app: api-server }
+---
+<span class="fn">apiVersion</span>: autoscaling/v2
+<span class="fn">kind</span>: HorizontalPodAutoscaler
+<span class="fn">metadata</span>:
+  name: api-server-hpa
+<span class="fn">spec</span>:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-server
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target: { type: Utilization, averageUtilization: 60 }</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q16</div>
+      <div>
+        <div class="qt">What is Helm and how does it relate to Kubernetes? Explain Charts, Values, and Release management.</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Helm</span><span class="tag">Package Manager</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Helm</strong> is the package manager for Kubernetes — it templates and manages groups of K8s manifests as versioned, reusable packages called <strong>Charts</strong>.<br><br>
+        <strong>Chart structure:</strong>
+        <pre>mychart/
+  Chart.yaml        <span class="cm"># Metadata: name, version, description</span>
+  values.yaml       <span class="cm"># Default configuration values</span>
+  templates/        <span class="cm"># Go-template K8s manifests</span>
+    deployment.yaml
+    service.yaml
+    ingress.yaml</pre>
+        <strong>Key commands:</strong>
+        <pre><span class="cm"># Install a chart (creates a Release)</span>
+helm install myapp ./mychart -f values.prod.yaml -n production
+
+<span class="cm"># Upgrade with new image tag</span>
+helm upgrade myapp ./mychart --set image.tag=v1.2.4
+
+<span class="cm"># Rollback to previous release</span>
+helm rollback myapp 1
+
+<span class="cm"># View all releases</span>
+helm list -A</pre>
+        <strong>Values override hierarchy:</strong> <code>values.yaml</code> (defaults) → <code>-f values.prod.yaml</code> (file override) → <code>--set key=val</code> (CLI override, highest priority).<br><br>
+        Helm is used heavily with Argo CD — Argo CD can deploy Helm charts directly by pointing at a chart repo and values file in Git.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q17</div>
+      <div>
+        <div class="qt">How does Kubernetes networking work? Explain Pod-to-Pod, Pod-to-Service, and external traffic routing.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">K8s Networking</span><span class="tag">CNI</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>K8s networking model:</strong> Every Pod gets its own IP. All Pods can communicate with all other Pods without NAT (flat network). The CNI plugin (Calico, Cilium, AWS VPC CNI, Flannel) implements this.<br><br>
+        <strong>Pod-to-Pod:</strong> Direct IP communication using the CNI network. On EKS with AWS VPC CNI, pod IPs are real VPC IPs — routing happens via VPC routing tables.<br><br>
+        <strong>Pod-to-Service:</strong> Service gets a stable ClusterIP (virtual IP). <code>kube-proxy</code> on each node maintains iptables/IPVS rules that DNAT the ClusterIP to one of the backend Pod IPs (load balanced). DNS: <code>my-service.my-namespace.svc.cluster.local</code> resolves to the ClusterIP via CoreDNS.<br><br>
+        <strong>External traffic:</strong>
+        <ul>
+          <li><strong>NodePort</strong>: Opens a port on every node (30000–32767). External traffic hits any node IP:port → iptables routes to Pod.</li>
+          <li><strong>LoadBalancer</strong>: Provisions a cloud load balancer (NLB/ALB) that routes to NodePort.</li>
+          <li><strong>Ingress</strong>: Single L7 entry point. Ingress Controller (nginx) runs as a Pod, watches Ingress objects, routes HTTP traffic to Services by hostname/path.</li>
+        </ul>
+        <strong>Network Policies:</strong> K8s firewall rules at Pod level — restrict which Pods can talk to which. Default: allow all. Apply least-privilege NetworkPolicy for production.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q18</div>
+      <div>
+        <div class="qt">Write a production Docker multi-stage build for a Node.js application managed by PM2. Include PM2 ecosystem config.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Docker</span><span class="tag">PM2</span><span class="tag">Node.js</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <pre><span class="cm"># ── Stage 1: Dependencies ────────────────────────────────</span>
+<span class="kw">FROM</span> node:20-alpine <span class="kw">AS</span> deps
+<span class="kw">WORKDIR</span> /app
+<span class="kw">COPY</span> package*.json ./
+<span class="kw">RUN</span> npm ci --only=production
+
+<span class="cm"># ── Stage 2: Runtime ─────────────────────────────────────</span>
+<span class="kw">FROM</span> node:20-alpine
+<span class="kw">RUN</span> npm install -g pm2
+
+<span class="cm"># Non-root user</span>
+<span class="kw">RUN</span> addgroup -S app && adduser -S app -G app
+<span class="kw">WORKDIR</span> /app
+
+<span class="kw">COPY</span> --from=deps --chown=app:app /app/node_modules ./node_modules
+<span class="kw">COPY</span> --chown=app:app . .
+
+<span class="kw">USER</span> app
+<span class="kw">EXPOSE</span> 3000
+
+<span class="cm"># PM2 runs in foreground mode inside Docker</span>
+<span class="kw">CMD</span> [<span class="st">"pm2-runtime"</span>, <span class="st">"ecosystem.config.js"</span>]</pre>
+        <strong>ecosystem.config.js:</strong>
+        <pre>module.exports = {
+  apps: [{
+    name:         <span class="st">'api'</span>,
+    script:       <span class="st">'src/index.js'</span>,
+    instances:    <span class="st">'max'</span>,    <span class="cm">// Use all CPU cores</span>
+    exec_mode:    <span class="st">'cluster'</span>,
+    max_memory_restart: <span class="st">'400M'</span>,
+    env_production: {
+      NODE_ENV: <span class="st">'production'</span>,
+      PORT:     <span class="num">3000</span>
+    },
+    log_date_format: <span class="st">'YYYY-MM-DD HH:mm:ss'</span>
+  }]
+};</pre>
+        <strong>Key:</strong> Use <code>pm2-runtime</code> (not <code>pm2 start</code>) inside Docker — it runs in foreground and forwards signals properly so Docker can gracefully stop the container.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q19</div>
+      <div>
+        <div class="qt">What is Nexus Repository Manager and how is it used in a CI/CD pipeline?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Nexus</span><span class="tag">Artifact Registry</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Nexus Repository Manager</strong> is an artifact repository that stores and manages build artifacts, Docker images, and package dependencies in your own infrastructure.<br><br>
+        <strong>Repository types:</strong>
+        <ul>
+          <li><strong>Hosted</strong>: Your own packages (npm publish, Maven deploy, Docker push)</li>
+          <li><strong>Proxy</strong>: Caches external repos (npmjs.com, PyPI, Maven Central) — saves bandwidth, provides offline builds</li>
+          <li><strong>Group</strong>: Combines hosted + proxy under a single URL for developers</li>
+        </ul>
+        <strong>CI/CD integration:</strong>
+        <pre><span class="cm"># In GitHub Actions/GitLab CI:</span>
+
+<span class="cm"># 1. Publish Docker image to Nexus Docker registry</span>
+docker tag myapp nexus.company.com:8082/myapp:${{ github.sha }}
+docker push nexus.company.com:8082/myapp:${{ github.sha }}
+
+<span class="cm"># 2. Pull npm packages from Nexus proxy (instead of npmjs.com)</span>
+echo "registry=https://nexus.company.com/repository/npm-group/" > .npmrc
+npm install</pre>
+        <strong>Why Nexus over DockerHub/npmjs directly:</strong> Air-gapped environments, license compliance scanning (Nexus IQ), caching for faster builds, and central control over which external packages are allowed.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q20</div>
+      <div>
+        <div class="qt">How do you troubleshoot a Kubernetes Pod stuck in CrashLoopBackOff? Give your full diagnostic workflow.</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">K8s Troubleshooting</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Systematic kubectl diagnostic workflow:</strong>
+        <pre><span class="cm"># 1. Describe the pod — look at Events section</span>
+kubectl describe pod &lt;pod-name&gt; -n production
+
+<span class="cm"># 2. Get logs from current container</span>
+kubectl logs &lt;pod-name&gt; -n production
+
+<span class="cm"># 3. Get logs from previous crashed container</span>
+kubectl logs &lt;pod-name&gt; -n production --previous
+
+<span class="cm"># 4. Check resource pressure on the node</span>
+kubectl top nodes
+kubectl top pods -n production
+
+<span class="cm"># 5. Exec into a running (init) container for debugging</span>
+kubectl exec -it &lt;pod-name&gt; -n production -- /bin/sh
+
+<span class="cm"># 6. Check events cluster-wide</span>
+kubectl get events -n production --sort-by='.lastTimestamp'</pre>
+        <strong>Common causes and fixes:</strong>
+        <ul>
+          <li><strong>OOMKilled (exit 137)</strong>: Memory limit too low → increase <code>resources.limits.memory</code></li>
+          <li><strong>Missing env var / secret</strong>: <code>describe pod</code> shows "Error: secret not found" → create the missing Secret</li>
+          <li><strong>Liveness probe failing</strong>: App takes too long to start → increase <code>initialDelaySeconds</code></li>
+          <li><strong>Image pull error</strong>: Wrong image tag or registry credentials → check <code>imagePullSecrets</code></li>
+          <li><strong>Config errors</strong>: App crashes at startup due to bad config → check <code>--previous</code> logs for the actual error</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /k8s -->
+
+
+<!-- ═══════════════════ CI/CD & GITOPS ═══════════════════ -->
+<div class="section" id="cicd">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:rgba(16,185,129,.1);color:var(--a4)">⚙️</div>
+    <div>
+      <div class="sec-title">CI/CD & GitOps</div>
+      <div class="sec-meta">6 questions · 25 min · Jenkins / GitLab CI / GitHub Actions / Terraform / Argo CD</div>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q21</div>
+      <div>
+        <div class="qt">Compare Jenkins, GitLab CI, and GitHub Actions. When would you choose each for an enterprise environment?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Jenkins</span><span class="tag">GitLab CI</span><span class="tag">GitHub Actions</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <ul>
+          <li><strong>Jenkins</strong>: Self-hosted, open-source. Most flexible — plugin ecosystem of 1800+ plugins. Groovy-based Jenkinsfile or declarative pipeline. High maintenance overhead (updates, plugin compatibility, Java heap management). Choose when: you need complete control, complex legacy pipelines, air-gapped environments, or existing Jenkins investment.</li>
+          <li><strong>GitLab CI</strong>: Tightly integrated with GitLab SCM. YAML-based <code>.gitlab-ci.yml</code>. Built-in container registry, security scanning, environments, and deployment tracking in one platform. Self-hosted or SaaS. Choose when: you're on GitLab and want a single-platform DevOps experience.</li>
+          <li><strong>GitHub Actions</strong>: Tightly integrated with GitHub. YAML workflows in <code>.github/workflows/</code>. Huge marketplace (10,000+ actions). GitHub-hosted runners (Ubuntu/Windows/macOS) or self-hosted. Choose when: your code is on GitHub and you want simplest setup with largest community.</li>
+        </ul>
+        <strong>Enterprise recommendation:</strong> GitLab CI or Jenkins (self-hosted) for regulated industries needing on-prem control. GitHub Actions for modern cloud-first teams. Many enterprises run Jenkins for legacy and migrate to GitHub Actions/GitLab CI for new projects.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q22</div>
+      <div>
+        <div class="qt">Write a Jenkins declarative pipeline that builds a Docker image, runs tests, pushes to registry, and deploys to Kubernetes.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Jenkins</span><span class="tag">Declarative Pipeline</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <pre><span class="fn">pipeline</span> {
+  agent { label <span class="st">'docker-agent'</span> }
+
+  environment {
+    REGISTRY    = <span class="st">'nexus.company.com:8082'</span>
+    IMAGE_NAME  = <span class="st">"${REGISTRY}/myapp"</span>
+    IMAGE_TAG   = <span class="st">"${GIT_COMMIT[0..7]}"</span>
+    KUBECONFIG  = credentials(<span class="st">'kubeconfig-prod'</span>)
+  }
+
+  stages {
+    stage(<span class="st">'Checkout'</span>) {
+      steps { checkout scm }
+    }
+
+    stage(<span class="st">'Test'</span>) {
+      steps {
+        sh <span class="st">'''
+          docker build --target test -t myapp:test .
+          docker run --rm myapp:test pytest tests/ -v
+        '''</span>
+      }
+      post { always { junit <span class="st">'test-results/*.xml'</span> } }
+    }
+
+    stage(<span class="st">'Build & Push'</span>) {
+      steps {
+        withCredentials([usernamePassword(
+          credentialsId: <span class="st">'nexus-creds'</span>,
+          usernameVariable: <span class="st">'USER'</span>,
+          passwordVariable: <span class="st">'PASS'</span>
+        )]) {
+          sh <span class="st">"""
+            docker login ${REGISTRY} -u ${USER} -p ${PASS}
+            docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+            docker push ${IMAGE_NAME}:${IMAGE_TAG}
+          """</span>
+        }
+      }
+    }
+
+    stage(<span class="st">'Deploy to K8s'</span>) {
+      when { branch <span class="st">'main'</span> }
+      steps {
+        sh <span class="st">"""
+          helm upgrade --install myapp ./helm/myapp \
+            --set image.tag=${IMAGE_TAG} \
+            --namespace production \
+            --wait --timeout 5m
+        """</span>
+      }
+    }
+  }
+
+  post {
+    failure {
+      slackSend channel: <span class="st">'#deployments'</span>,
+        message: <span class="st">"❌ Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"</span>
+    }
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q23</div>
+      <div>
+        <div class="qt">What is Infrastructure as Code (IaC)? Compare Terraform vs AWS CloudFormation. How do you manage Terraform state in a team?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Terraform</span><span class="tag">IaC</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>IaC</strong> means defining infrastructure (servers, networks, databases) in version-controlled code files rather than manual console clicks. Benefits: reproducibility, code review, rollback, documentation-as-code.<br><br>
+        <strong>Terraform vs CloudFormation:</strong>
+        <ul>
+          <li><strong>Terraform (HCL)</strong>: Multi-cloud (AWS, GCP, Azure, Kubernetes — all from one tool). Better state management. Larger community, better modularity. Plan shows you exactly what will change before applying. <em>Use for multi-cloud or new greenfield.</em></li>
+          <li><strong>CloudFormation (JSON/YAML)</strong>: AWS-native, no state file to manage (AWS manages it). Deep AWS integration (native drift detection, change sets). Harder to read, limited multi-cloud. <em>Use when you're AWS-only and want zero state management overhead.</em></li>
+        </ul>
+        <strong>Terraform team state management:</strong>
+        <pre>terraform {
+  backend <span class="st">"s3"</span> {
+    bucket         = <span class="st">"company-tfstate"</span>
+    key            = <span class="st">"prod/eks/terraform.tfstate"</span>
+    region         = <span class="st">"ap-south-1"</span>
+    encrypt        = true
+    dynamodb_table = <span class="st">"company-tf-lock"</span>  <span class="cm"># State locking</span>
+  }
+}</pre>
+        Workspaces for environment isolation: <code>terraform workspace new staging</code>. Never commit <code>.tfstate</code> to git — it contains plaintext secrets.
+        <div class="tip"><strong>Your experience:</strong> You've used Terraform + GitHub Actions CI/CD. Describe your state setup specifically — this is a strong differentiator.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q24</div>
+      <div>
+        <div class="qt">Explain deployment strategies: Rolling Update, Blue/Green, Canary in the context of Kubernetes. How does Argo Rollouts help?</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Deployment Strategies</span><span class="tag">Argo Rollouts</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Rolling Update</strong> (K8s default): Gradually replaces old Pods with new ones. Controlled by <code>maxSurge</code> and <code>maxUnavailable</code>. Zero downtime but both versions run simultaneously. Rollback: <code>kubectl rollout undo</code>.<br><br>
+        <strong>Blue/Green</strong>: Two full Deployments (blue=old, green=new). Switch Service selector from blue to green in one atomic operation. Instant rollback (switch selector back). Requires 2x resources during transition.<br><br>
+        <strong>Canary</strong>: Route small % of traffic to new version. Monitor metrics. Gradually increase. Native K8s canary needs two Deployments + Ingress weight annotations. Complex to manage manually.<br><br>
+        <strong>Argo Rollouts</strong> is a K8s controller that adds advanced deployment strategies as a CRD:
+        <pre><span class="fn">apiVersion</span>: argoproj.io/v1alpha1
+<span class="fn">kind</span>: Rollout
+<span class="fn">spec</span>:
+  strategy:
+    canary:
+      steps:
+      - setWeight: 10        <span class="cm"># 10% traffic to new version</span>
+      - pause: { duration: 1h }
+      - setWeight: 50
+      - analysis:            <span class="cm"># Run metric analysis</span>
+          templates:
+          - templateName: success-rate
+      - setWeight: 100</pre>
+        Integrates with Prometheus metrics to automatically roll back if error rate spikes during canary analysis.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q25</div>
+      <div>
+        <div class="qt">How do you implement security scanning in a CI/CD pipeline? Cover SAST, container scanning, and dependency scanning.</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Security</span><span class="tag">DevSecOps</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Shift-left security</strong> — integrate security checks into CI so issues are caught before deployment:<br><br>
+        <ul>
+          <li><strong>SAST (Static Application Security Testing)</strong>: Analyse source code for vulnerabilities. Tools: Bandit (Python), ESLint security plugin (JS), SonarQube (multi-language). Run in CI as a test stage — fail build on High severity findings.</li>
+          <li><strong>Dependency scanning</strong>: Detect vulnerable packages. Tools: <code>pip-audit</code> (Python), <code>npm audit</code> (Node), OWASP Dependency-Check, Snyk. Integrate with <code>snyk test</code> in CI.</li>
+          <li><strong>Container image scanning</strong>: Scan final Docker image for OS-level CVEs. Tools: Trivy (free, fast), Grype, Snyk Container, AWS ECR image scanning (uses Clair).</li>
+          <li><strong>Secret scanning</strong>: Detect hardcoded secrets in commits. Tools: GitLeaks, GitHub Secret Scanning, Trufflehog. Run as pre-commit hook AND in CI.</li>
+          <li><strong>IaC scanning</strong>: Scan Terraform/CloudFormation for misconfigurations. Tools: Checkov, tfsec, Terrascan. Run before <code>terraform apply</code> in CI.</li>
+        </ul>
+        <pre><span class="cm"># GitHub Actions example — Trivy scan</span>
+- name: Scan image with Trivy
+  uses: aquasecurity/trivy-action@master
+  with:
+    image-ref: myapp:${{ github.sha }}
+    severity: CRITICAL,HIGH
+    exit-code: '1'  <span class="cm"># Fail CI on critical vulns</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q26 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q26</div>
+      <div>
+        <div class="qt">How do you configure monitoring and alerting for a Kubernetes cluster? Describe the Prometheus + Grafana + Alertmanager stack.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Monitoring</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Standard K8s monitoring stack (kube-prometheus-stack Helm chart):</strong>
+        <pre><span class="cm"># Install the full stack in one command</span>
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install kube-prometheus prometheus-community/kube-prometheus-stack \
+  -n monitoring --create-namespace \
+  -f monitoring-values.yaml</pre>
+        <strong>Components:</strong>
+        <ul>
+          <li><strong>Prometheus</strong>: Scrapes metrics from targets (kubelet, kube-state-metrics, node-exporter, app /metrics endpoints). Stores time-series data. Evaluates alerting rules.</li>
+          <li><strong>Grafana</strong>: Dashboards on Prometheus data. Pre-built K8s dashboards (cluster overview, node stats, pod metrics). Custom dashboards for app-level metrics.</li>
+          <li><strong>Alertmanager</strong>: Receives alerts from Prometheus, deduplicates, groups, routes to receivers (Slack, PagerDuty, email). Silences for maintenance windows.</li>
+          <li><strong>kube-state-metrics</strong>: Exposes K8s object state as metrics (Deployment replicas, PVC status, Pod phase)</li>
+          <li><strong>node-exporter</strong>: Host-level metrics (CPU, memory, disk, network) per node as a DaemonSet</li>
+        </ul>
+        <strong>Example alert rule:</strong>
+        <pre>- alert: PodCrashLooping
+  expr: rate(kube_pod_container_status_restarts_total[5m]) > 0
+  for: 5m
+  labels: { severity: critical }
+  annotations:
+    summary: <span class="st">"Pod {{ $labels.pod }} is crash looping"</span></pre>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /cicd -->
+
+
+<!-- ═══════════════════ WINDOWS & LINUX ═══════════════════ -->
+<div class="section" id="sysadmin">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:rgba(245,158,11,.1);color:var(--a3)">🖥️</div>
+    <div>
+      <div class="sec-title">Windows Server 2022 & Linux</div>
+      <div class="sec-meta">7 questions · 30 min · AD DS / IIS / PHP / Apache / Nginx / SQL Server / PostgreSQL</div>
+    </div>
+  </div>
+
+  <!-- Q27 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q27</div>
+      <div>
+        <div class="qt">How do you configure IIS on Windows Server 2022 to host PHP-based applications? Walk through the full setup.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">IIS</span><span class="tag">PHP</span><span class="tag">Windows Server</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Full IIS + PHP setup on Windows Server 2022:</strong>
+        <pre><span class="cm"># Step 1: Install IIS with CGI support (CGI required for PHP FastCGI)</span>
+Install-WindowsFeature Web-Server, Web-CGI, Web-Mgmt-Console `
+  -IncludeManagementTools
+
+<span class="cm"># Step 2: Download PHP (Non-Thread Safe) for FastCGI</span>
+<span class="cm"># Extract to C:\PHP</span>
+<span class="cm"># Copy php.ini-production → php.ini</span>
+<span class="cm"># Configure extension_dir, error_log, upload_max_filesize etc.</span>
+
+<span class="cm"># Step 3: Register PHP with IIS FastCGI via PowerShell</span>
+Add-WebConfiguration system.webServer/fastCgi `
+  -Value @{fullPath='C:\PHP\php-cgi.exe'}
+
+<span class="cm"># Step 4: Create Handler Mapping</span>
+Add-WebConfigurationProperty `
+  -PSPath 'IIS:\Sites\Default Web Site' `
+  -Filter system.webServer/handlers -Name . `
+  -Value @{name='PHP_via_FastCGI'; path='*.php'; verb='*'; `
+           modules='FastCgiModule'; scriptProcessor='C:\PHP\php-cgi.exe'}</span>
+
+<span class="cm"># Step 5: Set default document</span>
+Set-WebConfigurationProperty -Filter "//defaultDocument/files" `
+  -PSPath 'IIS:\' -Name Collection `
+  -AtElement @{value='index.php'} -Add</pre>
+        <strong>For Drupal/WordPress on IIS:</strong> Also install URL Rewrite module (IIS module for .htaccess-style rewriting) and set <code>web.config</code> rules to route all traffic through <code>index.php</code>. Enable required PHP extensions: <code>php_pdo_mysql.dll</code>, <code>php_gd2.dll</code>, <code>php_mbstring.dll</code>, <code>php_openssl.dll</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q28 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q28</div>
+      <div>
+        <div class="qt">Explain Active Directory Group Policies (GPO). How do you troubleshoot GPO application failures?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Active Directory</span><span class="tag">GPO</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>GPO (Group Policy Object)</strong>: A collection of settings applied to computers and users in an AD environment. Linked to Sites, Domains, or OUs. Applied in LSDOU order (Local → Site → Domain → OU). Later-applied policies win by default.<br><br>
+        <strong>Common GPO uses:</strong>
+        <ul>
+          <li>Security baselines (password policy, account lockout, Windows Firewall rules)</li>
+          <li>Software deployment (MSI packages pushed to computers)</li>
+          <li>Drive/printer mapping, desktop wallpaper, browser settings</li>
+          <li>Restrict Control Panel, USB access, removable media</li>
+        </ul>
+        <strong>GPO troubleshooting commands:</strong>
+        <pre><span class="cm"># Force immediate GPO refresh</span>
+gpupdate /force
+
+<span class="cm"># See which GPOs are applied to current machine/user</span>
+gpresult /R
+
+<span class="cm"># Detailed HTML report of GPO application</span>
+gpresult /H C:\gpreport.html /F
+
+<span class="cm"># Check GPO event logs</span>
+Get-WinEvent -LogName 'Microsoft-Windows-GroupPolicy/Operational' |
+  Where-Object {$_.LevelDisplayName -eq 'Error'} | Select -First 10</pre>
+        <strong>Common issues:</strong> GPO linked to wrong OU, WMI filter blocking application, security filtering excluding the computer/user account, replication latency between DCs.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q29 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q29</div>
+      <div>
+        <div class="qt">Compare Nginx and Apache as web servers. When would you choose each, and how do you configure Nginx as a reverse proxy with SSL termination?</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Nginx</span><span class="tag">Apache</span><span class="tag">SSL</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Apache</strong>: Process/thread-based model. Excellent for dynamic content with <code>mod_php</code> (PHP embedded in process). <code>.htaccess</code> per-directory config (flexible but slow — reads file on every request). Rich module ecosystem. Better for shared hosting or legacy PHP apps.<br><br>
+        <strong>Nginx</strong>: Event-driven, async non-blocking. Handles thousands of concurrent connections with very low memory. No per-directory config files. Excellent as a reverse proxy, load balancer, and static file server. Better for high-concurrency and modern architectures.<br><br>
+        <strong>Nginx reverse proxy + SSL termination config:</strong>
+        <pre>server {
+    listen 443 ssl http2;
+    server_name api.company.com;
+
+    ssl_certificate     /etc/ssl/certs/fullchain.pem;
+    ssl_certificate_key /etc/ssl/private/privkey.pem;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
+    <span class="cm"># Security headers</span>
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+
+    location / {
+        proxy_pass         http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+    }
+}
+<span class="cm"># Redirect HTTP to HTTPS</span>
+server {
+    listen 80;
+    server_name api.company.com;
+    return 301 https://$host$request_uri;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q30 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q30</div>
+      <div>
+        <div class="qt">How do you manage and tune PostgreSQL in production on Linux? Cover pg_hba.conf, connection pooling, slow query logging, and vacuuming.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">PostgreSQL</span><span class="tag">Linux</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>pg_hba.conf</strong> — Client authentication config:
+        <pre><span class="cm"># TYPE  DATABASE    USER        ADDRESS         METHOD</span>
+local   all         postgres                    peer     <span class="cm"># Unix socket</span>
+host    appdb       appuser     10.0.10.0/24    scram-sha-256
+host    all         all         0.0.0.0/0       reject   <span class="cm"># Block everything else</span></pre>
+        <strong>Key postgresql.conf tunings:</strong>
+        <pre>max_connections = 200           <span class="cm"># Use PgBouncer if >200</span>
+shared_buffers = 4GB           <span class="cm"># 25% of RAM</span>
+effective_cache_size = 12GB    <span class="cm"># 75% of RAM</span>
+work_mem = 64MB                <span class="cm"># Per sort/hash operation</span>
+wal_buffers = 64MB
+checkpoint_completion_target = 0.9
+log_min_duration_statement = 1000  <span class="cm"># Log queries >1s</span>
+log_checkpoints = on
+autovacuum = on                <span class="cm"># Never disable this</span></pre>
+        <strong>Connection pooling with PgBouncer:</strong> Place PgBouncer between app and PostgreSQL. Transaction mode (most efficient) — connection returned to pool after each transaction. App connects to PgBouncer on port 6432; PgBouncer maintains a pool of 20–30 real PG connections shared by 200+ app connections.<br><br>
+        <strong>VACUUM:</strong> PostgreSQL uses MVCC — dead tuples accumulate after updates/deletes. <code>autovacuum</code> reclaims space. Monitor with: <code>SELECT relname, n_dead_tup, last_autovacuum FROM pg_stat_user_tables ORDER BY n_dead_tup DESC;</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q31 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q31</div>
+      <div>
+        <div class="qt">How do you configure and secure SSH on a Linux server? What are SSH hardening best practices?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Linux</span><span class="tag">SSH Security</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>/etc/ssh/sshd_config hardening:</strong>
+        <pre>Port 2222                   <span class="cm"># Change from default 22</span>
+PermitRootLogin no          <span class="cm"># Never allow root SSH</span>
+PasswordAuthentication no   <span class="cm"># Key-based auth only</span>
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+MaxAuthTries 3
+LoginGraceTime 20
+AllowUsers deployer devops  <span class="cm"># Whitelist specific users</span>
+Protocol 2
+X11Forwarding no
+AllowTcpForwarding no       <span class="cm"># Unless needed for tunneling</span>
+ClientAliveInterval 300
+ClientAliveCountMax 2</pre>
+        <strong>Additional hardening:</strong>
+        <ul>
+          <li><strong>Fail2ban</strong>: Auto-ban IPs after N failed login attempts: <code>apt install fail2ban</code> → configure <code>/etc/fail2ban/jail.local</code></li>
+          <li><strong>IP allowlisting</strong>: Restrict SSH to VPN/Bastion host IP via Security Group / iptables</li>
+          <li><strong>Ed25519 keys</strong>: Generate modern keys: <code>ssh-keygen -t ed25519 -C "ravan@company"</code> — stronger and shorter than RSA 4096</li>
+          <li><strong>SSH certificates</strong>: For scale — use SSH CA certificates instead of per-server authorized_keys management</li>
+        </ul>
+        <pre><span class="cm"># Restart after config changes</span>
+sshd -t  <span class="cm"># Test config syntax first!</span>
+systemctl restart sshd</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q32 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q32</div>
+      <div>
+        <div class="qt">How do you monitor and tune Linux server performance? Explain top, htop, iostat, vmstat, netstat, and ss.</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Linux Performance</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <pre><span class="cm"># CPU, memory, load average</span>
+top / htop          <span class="cm"># Interactive. Load avg > #CPUs = overloaded</span>
+
+<span class="cm"># Disk I/O — identify slow disks</span>
+iostat -xz 1        <span class="cm"># %util near 100% = disk bottleneck. await = latency</span>
+
+<span class="cm"># Memory, swap, CPU — snapshot per second</span>
+vmstat 1            <span class="cm"># si/so > 0 = swapping = RAM pressure</span>
+
+<span class="cm"># Network connections</span>
+ss -tulnp           <span class="cm"># Show all listening ports + PIDs (modern netstat)</span>
+ss -s               <span class="cm"># Summary: established, time-wait, close-wait counts</span>
+
+<span class="cm"># Network bandwidth per process</span>
+iftop / nethogs
+
+<span class="cm"># System call tracing for a stuck process</span>
+strace -p &lt;PID&gt;
+
+<span class="cm"># Open files / file descriptor limits</span>
+lsof -p &lt;PID&gt;
+ulimit -n           <span class="cm"># Current fd limit — increase for high-connection servers</span>
+
+<span class="cm"># Disk space</span>
+df -h && du -sh /var/* | sort -rh | head -20</pre>
+        <strong>Key production settings to tune:</strong>
+        <ul>
+          <li><code>/etc/security/limits.conf</code>: Increase <code>nofile</code> (file descriptors) to 65535 for web servers</li>
+          <li><code>sysctl net.core.somaxconn=65535</code>: Increase socket backlog for high-traffic services</li>
+          <li><code>sysctl vm.swappiness=10</code>: Reduce swapping on database servers</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q33 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q33</div>
+      <div>
+        <div class="qt">How do you manage SQL Server on Windows Server? Explain Always On Availability Groups and backup strategies.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">SQL Server</span><span class="tag">Always On</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>SQL Server Always On Availability Groups (AG)</strong> — SQL Server's HA/DR solution. A group of databases that fail over together as a unit across multiple SQL Server instances.<br><br>
+        <strong>Components:</strong>
+        <ul>
+          <li><strong>Primary replica</strong>: Read-write. Sends log records to secondary replicas.</li>
+          <li><strong>Secondary replicas</strong>: Synchronous (data loss = 0, failover ~10s) or Asynchronous (possible data loss, used for DR across sites) modes.</li>
+          <li><strong>Listener</strong>: Virtual IP/DNS name that clients connect to — automatically routes to current primary after failover</li>
+          <li><strong>Windows Server Failover Cluster (WSFC)</strong>: Required underpinning for automatic failover</li>
+        </ul>
+        <strong>Backup strategy:</strong>
+        <pre><span class="cm">-- Full backup weekly (Sunday 2 AM)</span>
+BACKUP DATABASE [ProdDB] TO DISK = 'D:\Backups\ProdDB_Full.bak'
+  WITH COMPRESSION, CHECKSUM;
+
+<span class="cm">-- Differential daily (Mon-Sat)</span>
+BACKUP DATABASE [ProdDB] TO DISK = 'D:\Backups\ProdDB_Diff.bak'
+  WITH DIFFERENTIAL, COMPRESSION;
+
+<span class="cm">-- Transaction log every 15 minutes (for RPO &lt;15 min)</span>
+BACKUP LOG [ProdDB] TO DISK = 'D:\Backups\ProdDB_Log.bak';</pre>
+        Use SQL Server Agent Jobs to automate, and Ola Hallengren's maintenance scripts (industry standard) for intelligent backup management with automatic cleanup.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /sysadmin -->
+
+
+<!-- ═══════════════════ SCRIPTING & ON-PREM ═══════════════════ -->
+<div class="section" id="scripting">
+  <div class="sec-hdr">
+    <div class="sec-ico" style="background:rgba(244,63,94,.1);color:var(--a5)">📟</div>
+    <div>
+      <div class="sec-title">Scripting, Automation & On-Premise Infrastructure</div>
+      <div class="sec-meta">7 questions · 30 min · Bash / Python / AWS CLI / FortiGate / NAS / Backup / Rack Servers</div>
+    </div>
+  </div>
+
+  <!-- Q34 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q34</div>
+      <div>
+        <div class="qt">Write a Bash script that: checks disk usage across servers, sends an alert if >80%, and auto-cleans old logs.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Bash</span><span class="tag">Automation</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <pre>#!/bin/bash
+# disk_monitor.sh — Run via cron: */15 * * * * /opt/scripts/disk_monitor.sh
+
+THRESHOLD=80
+ALERT_EMAIL="devops@company.com"
+LOG_DIR="/var/log/app"
+LOG_RETENTION_DAYS=30
+
+check_disk() {
+    local mount=$1
+    local usage=$(df -h "$mount" | awk 'NR==2 {gsub(/%/,""); print $5}')
+
+    if [ "$usage" -ge "$THRESHOLD" ]; then
+        local hostname=$(hostname -f)
+        local msg="⚠️ DISK ALERT: ${hostname}:${mount} at ${usage}% (threshold: ${THRESHOLD}%)"
+
+        <span class="cm"># Send email alert</span>
+        echo "$msg" | mail -s "[DISK ALERT] ${hostname}" "$ALERT_EMAIL"
+
+        <span class="cm"># Also send to Slack</span>
+        curl -s -X POST "$SLACK_WEBHOOK" \
+          -H 'Content-type: application/json' \
+          --data "{\"text\": \"${msg}\"}"
+
+        echo "$(date '+%Y-%m-%d %H:%M:%S') $msg" >> /var/log/disk_alerts.log
+
+        <span class="cm"># Auto-clean old log files to recover space</span>
+        echo "Cleaning logs older than ${LOG_RETENTION_DAYS} days in ${LOG_DIR}..."
+        find "$LOG_DIR" -name "*.log" -mtime +${LOG_RETENTION_DAYS} -delete
+        find "$LOG_DIR" -name "*.log.gz" -mtime +${LOG_RETENTION_DAYS} -delete
+
+        <span class="cm"># Also clean rotated systemd journal logs</span>
+        journalctl --vacuum-time=30d 2>/dev/null
+
+        local new_usage=$(df -h "$mount" | awk 'NR==2 {gsub(/%/,""); print $5}')
+        echo "Disk usage after cleanup: ${new_usage}%"
+    fi
+}
+
+<span class="cm"># Check all mounted filesystems</span>
+df -h | awk 'NR>1 && $6 != "tmpfs" {print $6}' | while read mount; do
+    check_disk "$mount"
+done</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q35 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q35</div>
+      <div>
+        <div class="qt">Write a Python script using boto3 to: list all EC2 instances with their status and tags, stop instances tagged env=dev at 8 PM, and generate a cost report.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Python</span><span class="tag">boto3</span><span class="tag">AWS CLI</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <pre><span class="kw">import</span> boto3
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime, timedelta
+
+ec2 = boto3.client(<span class="st">'ec2'</span>, region_name=<span class="st">'ap-south-1'</span>)
+ce  = boto3.client(<span class="st">'ce'</span>,  region_name=<span class="st">'us-east-1'</span>)  <span class="cm"># Cost Explorer always us-east-1</span>
+
+<span class="kw">def</span> <span class="fn">list_instances</span>():
+    resp = ec2.describe_instances()
+    instances = []
+    <span class="kw">for</span> r <span class="kw">in</span> resp[<span class="st">'Reservations'</span>]:
+        <span class="kw">for</span> i <span class="kw">in</span> r[<span class="st">'Instances'</span>]:
+            tags = {t[<span class="st">'Key'</span>]: t[<span class="st">'Value'</span>] <span class="kw">for</span> t <span class="kw">in</span> i.get(<span class="st">'Tags'</span>, [])}
+            instances.append({
+                <span class="st">'id'</span>:    i[<span class="st">'InstanceId'</span>],
+                <span class="st">'type'</span>:  i[<span class="st">'InstanceType'</span>],
+                <span class="st">'state'</span>: i[<span class="st">'State'</span>][<span class="st">'Name'</span>],
+                <span class="st">'name'</span>:  tags.get(<span class="st">'Name'</span>, <span class="st">'N/A'</span>),
+                <span class="st">'env'</span>:   tags.get(<span class="st">'env'</span>, <span class="st">'N/A'</span>),
+            })
+    <span class="kw">return</span> instances
+
+<span class="kw">def</span> <span class="fn">stop_dev_instances</span>():
+    resp = ec2.describe_instances(
+        Filters=[
+            {<span class="st">'Name'</span>: <span class="st">'tag:env'</span>, <span class="st">'Values'</span>: [<span class="st">'dev'</span>]},
+            {<span class="st">'Name'</span>: <span class="st">'instance-state-name'</span>, <span class="st">'Values'</span>: [<span class="st">'running'</span>]}
+        ]
+    )
+    ids = [i[<span class="st">'InstanceId'</span>]
+           <span class="kw">for</span> r <span class="kw">in</span> resp[<span class="st">'Reservations'</span>]
+           <span class="kw">for</span> i <span class="kw">in</span> r[<span class="st">'Instances'</span>]]
+    <span class="kw">if</span> ids:
+        ec2.stop_instances(InstanceIds=ids)
+        print(<span class="st">f"Stopped {len(ids)} dev instances: {ids}"</span>)
+
+<span class="kw">def</span> <span class="fn">cost_report</span>(days=30):
+    end   = datetime.today().strftime(<span class="st">'%Y-%m-%d'</span>)
+    start = (datetime.today() - timedelta(days=days)).strftime(<span class="st">'%Y-%m-%d'</span>)
+    resp = ce.get_cost_and_usage(
+        TimePeriod={<span class="st">'Start'</span>: start, <span class="st">'End'</span>: end},
+        Granularity=<span class="st">'MONTHLY'</span>,
+        Metrics=[<span class="st">'UnblendedCost'</span>],
+        GroupBy=[{<span class="st">'Type'</span>: <span class="st">'DIMENSION'</span>, <span class="st">'Key'</span>: <span class="st">'SERVICE'</span>}]
+    )
+    <span class="kw">for</span> result <span class="kw">in</span> resp[<span class="st">'ResultsByTime'</span>]:
+        <span class="kw">for</span> group <span class="kw">in</span> result[<span class="st">'Groups'</span>]:
+            svc  = group[<span class="st">'Keys'</span>][0]
+            cost = group[<span class="st">'Metrics'</span>][<span class="st">'UnblendedCost'</span>][<span class="st">'Amount'</span>]
+            print(<span class="st">f"{svc}: ${float(cost):.2f}"</span>)
+
+<span class="kw">if</span> __name__ == <span class="st">'__main__'</span>:
+    print(<span class="st">"=== EC2 Instances ==="</span>)
+    <span class="kw">for</span> i <span class="kw">in</span> list_instances(): print(i)
+    stop_dev_instances()
+    print(<span class="st">"\n=== 30-Day Cost Report ==="</span>)
+    cost_report()</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q36 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q36</div>
+      <div>
+        <div class="qt">What is a FortiGate firewall? Explain firewall policies, VPN configuration (IPSec/SSL), and FortiGate in a datacenter context.</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">FortiGate</span><span class="tag">On-Premise</span><span class="tag">Security</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>FortiGate</strong> is Fortinet's Next-Generation Firewall (NGFW). Used for perimeter security in on-premise datacenters. Combines traditional firewall, IPS (Intrusion Prevention), web filtering, SSL inspection, and SD-WAN in one device.<br><br>
+        <strong>Firewall Policy structure:</strong>
+        <ul>
+          <li>Policies = rules evaluated top-to-bottom (first match wins, similar to AWS SGs but stateful and explicit deny)</li>
+          <li>Each policy: Source (interface + address) → Destination (interface + address) → Service (port/protocol) → Action (Accept/Deny) + Security profiles (IPS, AV, Web Filter)</li>
+          <li>NAT policies for outbound internet (source NAT) and inbound services (destination NAT / VIP)</li>
+        </ul>
+        <strong>VPN types on FortiGate:</strong>
+        <ul>
+          <li><strong>IPSec Site-to-Site VPN</strong>: Connects two offices/datacenters. Phase 1 (IKE — key exchange, authentication) + Phase 2 (IPSec tunnel parameters). Used for branch office to HQ connectivity or on-prem to AWS/GCP (via AWS VPN Gateway).</li>
+          <li><strong>SSL VPN</strong>: Remote user access. Client installs FortiClient VPN. User authenticates → gets VPN IP → tunneled access to internal resources. Supports 2FA (FortiToken).</li>
+        </ul>
+        <strong>HA setup</strong>: Two FortiGates in Active-Passive cluster. Heartbeat between units. If primary fails, secondary takes over in ~2-3 seconds with stateful session table sync.
+        <div class="tip">If you haven't directly managed FortiGate, frame your answer as "I have experience with firewall policy design principles — on AWS this maps to Security Groups and NACLs, and I'm comfortable learning FortiGate's management UI which follows the same conceptual model."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q37 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q37</div>
+      <div>
+        <div class="qt">How do you design a backup and disaster recovery strategy for on-premise infrastructure including NAS, rack servers, and VMs?</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Backup</span><span class="tag">DR</span><span class="tag">On-Prem</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>3-2-1 Backup Rule</strong>: 3 copies of data, 2 different media types, 1 offsite copy. This is the baseline.<br><br>
+        <strong>On-premise backup strategy:</strong>
+        <ul>
+          <li><strong>VMs (Hyper-V / VMware)</strong>: Use Veeam Backup & Replication — agent-less backup of entire VM snapshots. Schedule: Full backup weekly, incremental daily. Store on NAS (primary) + replicate to offsite NAS or cloud (secondary).</li>
+          <li><strong>NAS (Network Attached Storage)</strong>: RAID 6 (survives 2 disk failures) for the NAS array itself. NAS-to-NAS replication to offsite location. Periodic offsite tape rotation for long-term archival.</li>
+          <li><strong>Database servers</strong>: Native DB backups (SQL Server AG + transaction logs, PostgreSQL pg_dump or WAL archiving) → NAS → S3 Glacier.</li>
+          <li><strong>Rack servers (bare metal)</strong>: Image backups using Clonezilla or Acronis. Store on NAS. For recovery: PXE boot from backup image.</li>
+        </ul>
+        <strong>DR testing:</strong> Recovery is only as good as the last test. Quarterly DR drills — restore a VM from backup, verify database integrity, test RTO against SLA. Document the playbook.<br><br>
+        <strong>Cloud offsite with AWS:</strong> AWS Storage Gateway → Tape Gateway mode acts as a virtual tape library, writing directly to S3 Glacier. Or use AWS Backup for hybrid on-prem + cloud backup management.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q38 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q38</div>
+      <div>
+        <div class="qt">How do you configure and manage virtual machines on Hyper-V or VMware? What is VM live migration?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">Virtualization</span><span class="tag">Hyper-V</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Hyper-V</strong> (Microsoft) vs <strong>VMware vSphere/ESXi</strong> (VMware/Broadcom): Both are Type 1 bare-metal hypervisors — run directly on hardware, not on top of an OS.<br><br>
+        <strong>VM management via PowerShell (Hyper-V):</strong>
+        <pre><span class="cm"># Create a new VM</span>
+New-VM -Name "WebServer-01" -MemoryStartupBytes 4GB `
+  -VHDPath "D:\VMs\WebServer-01.vhdx" -Generation 2
+
+<span class="cm"># Configure VM</span>
+Set-VM -Name "WebServer-01" -ProcessorCount 4
+Add-VMNetworkAdapter -VMName "WebServer-01" -SwitchName "Production-vSwitch"
+
+<span class="cm"># Create checkpoint (snapshot)</span>
+Checkpoint-VM -Name "WebServer-01" -SnapshotName "Before-Patch-Tuesday"
+
+<span class="cm"># Start VM</span>
+Start-VM -Name "WebServer-01"</pre>
+        <strong>VM Live Migration</strong>: Move a running VM from one physical host to another with zero downtime. Requires:
+        <ul>
+          <li>Shared storage (SAN/NAS/SMB share) OR storage migration enabled</li>
+          <li>Same subnet/VLAN for VM network continuity</li>
+          <li>Failover Cluster (Hyper-V) or vMotion (VMware) configured</li>
+        </ul>
+        Memory state, CPU state, and network connections transfer seamlessly — users notice no interruption. Used for host maintenance, load balancing, and hardware replacement.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q39 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q39</div>
+      <div>
+        <div class="qt">What is PM2 and how do you use it in production for Node.js application management? How does it compare to systemd?</div>
+        <div class="tags"><span class="tag m">Medium</span><span class="tag">PM2</span><span class="tag">Node.js</span><span class="tag">Process Management</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>PM2</strong> is a process manager for Node.js (and Python/other runtimes) — keeps applications running, restarts them on crash, manages logs, and provides cluster mode for multi-core utilisation.<br><br>
+        <strong>Essential PM2 commands:</strong>
+        <pre><span class="cm"># Start with ecosystem config</span>
+pm2 start ecosystem.config.js --env production
+
+<span class="cm"># Monitor in real-time</span>
+pm2 monit
+
+<span class="cm"># View logs</span>
+pm2 logs myapp --lines 100
+
+<span class="cm"># Reload with zero downtime (graceful restart)</span>
+pm2 reload myapp
+
+<span class="cm"># Save process list and set up startup script</span>
+pm2 save
+pm2 startup systemd   <span class="cm"># Generate systemd unit to auto-start PM2 on boot</span>
+
+<span class="cm"># Scale cluster instances</span>
+pm2 scale myapp 4     <span class="cm"># Scale to 4 workers</span>
+pm2 scale myapp +2    <span class="cm"># Add 2 more workers</span></pre>
+        <strong>PM2 vs systemd:</strong>
+        <ul>
+          <li><strong>PM2</strong>: Node.js specific, cluster mode, built-in log management, hot reload. Great for Node.js apps.</li>
+          <li><strong>systemd</strong>: OS-level service manager. Language-agnostic. More reliable for production (systemd is battle-tested, PM2 is an extra abstraction layer). For critical production services, some teams prefer systemd + a single Node process (no cluster) and put Nginx in front for load distribution.</li>
+        </ul>
+        Best practice: Use <code>pm2 startup systemd</code> so PM2 itself is managed by systemd — you get the best of both worlds.
+      </div>
+    </div>
+  </div>
+
+  <!-- Q40 -->
+  <div class="card">
+    <div class="card-q">
+      <div class="qn">Q40</div>
+      <div>
+        <div class="qt">Design a high-availability architecture combining on-premise infrastructure with AWS cloud (hybrid cloud). Include network connectivity, failover, and monitoring.</div>
+        <div class="tags"><span class="tag h">Hard</span><span class="tag">Hybrid Cloud</span><span class="tag">Architecture</span></div>
+      </div>
+    </div>
+    <div class="card-a">
+      <div class="a-label">Optimum Answer</div>
+      <div class="ab">
+        <strong>Hybrid architecture design:</strong><br><br>
+        <strong>Network connectivity (on-prem ↔ AWS):</strong>
+        <ul>
+          <li><strong>AWS Direct Connect</strong>: Dedicated 1–100Gbps private connection from on-prem datacenter to AWS. No public internet — lower latency, consistent bandwidth. Best for production workloads with high data transfer.</li>
+          <li><strong>AWS Site-to-Site VPN</strong>: IPSec VPN over internet as backup path or for lower-bandwidth needs. Used as Direct Connect failover.</li>
+          <li><strong>AWS Transit Gateway</strong>: Hub connecting multiple VPCs + on-prem via single connection (instead of individual VPC peering).</li>
+        </ul>
+        <strong>Failover strategy:</strong>
+        <ul>
+          <li>Active workloads on on-prem servers; AWS is warm standby (Pilot Light)</li>
+          <li>Route 53 health checks monitor on-prem endpoints; on failure, DNS automatically routes to AWS (failover routing policy)</li>
+          <li>Data replication: AWS Storage Gateway, AWS DataSync, or database replication (SQL Server log shipping to RDS, PostgreSQL streaming replication)</li>
+        </ul>
+        <strong>Identity integration:</strong>
+        <ul>
+          <li>AWS Directory Service — AD Connector links AWS IAM to on-prem Active Directory. Users log in to AWS Console with their AD credentials.</li>
+        </ul>
+        <strong>Monitoring — unified view:</strong>
+        <ul>
+          <li>CloudWatch Agent on on-prem servers → sends metrics/logs to CloudWatch</li>
+          <li>Or: Prometheus + Grafana (on-prem) scraping both on-prem exporters and AWS CloudWatch exporter in one dashboard</li>
+        </ul>
+        <div class="tip"><strong>Your experience:</strong> Map your 3-tier app VPC design + blue-green migration to this architecture. That work was the cloud side of exactly this pattern.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /scripting -->
+
+</main>
+
+<footer>
+  Rebuilt for correct JD — System Engineer · Rajarhat-Newtown · Ravan (Ramkrishna Roy Barman)<br>
+  40 questions · All 6 domains covered · Good luck tomorrow ⚡
+</footer>
+
+</body>
+</html>
