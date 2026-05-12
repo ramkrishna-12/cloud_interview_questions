@@ -25,15 +25,26 @@ jobs:
       run : |
         docker build -t cloud-static-site .
 
-    # Veryfy image exists
-    - name: Verify Docker Images
-      run: |
-        docker images
+    # Run Docker container\
 
-    # Test website is accessibility
+    - name: Run Docker Container
+      run: |
+        docker run -d -p 8080:80 --name static-site cloud-static-site
+
+    - name: Wait for container startup
+      run: sleep 5
+
+    - name: Verify Running Container
+      run: docker ps
+
+    - name: Check Container Logs
+      run: docker logs static-site
+
+  # Test the website
     - name: Test Website
       run: |
-        curl http://localhost:8080
+        curl -I http://localhost:8080
+          
 
     # Stop container
     - name: Stop Container
