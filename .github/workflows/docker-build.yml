@@ -1,0 +1,42 @@
+name: Docker Static Site CI 
+
+on:
+  push:
+    branches:
+      - main
+    
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    # Checkout repository
+    - name: Checkout Code 
+      users: actions/checkout@v4
+
+    # Build Docker image
+    - name: Build Docker Image
+      run : |
+        docker build -t cloud-static -site .
+
+    # Veryfy image exists
+    - name: Verify Docker Images
+      run: |
+        docker images
+
+    # Test website is accessibility
+    - name: Test Website
+      run: |
+        curl http://localhost:8080
+
+    # Stop container
+    - name: Stop Container
+      run: |
+        docker stop static-site
+        docker rm static-site
