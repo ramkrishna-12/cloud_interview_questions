@@ -18,7 +18,7 @@ jobs:
 
     # Checkout repository
     - name: Checkout Code 
-      users: actions/checkout@v4
+      uses: actions/checkout@v4
 
     # Build Docker image
     - name: Build Docker Image
