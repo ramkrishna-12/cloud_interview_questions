@@ -35,7 +35,7 @@ jobs:
       run: sleep 5
 
     - name: Verify Running Container
-      run: docker ps
+      run: docker ps -a
 
     - name: Check Container Logs
       run: docker logs static-site
