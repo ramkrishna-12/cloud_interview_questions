@@ -3,11 +3,11 @@ name: Docker Static Site CI
 on:
   push:
     branches:
-      - main
+      - master
     
   pull_request:
     branches:
-      - main
+      - master
 
 
 jobs:
