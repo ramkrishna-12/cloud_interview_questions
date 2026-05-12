@@ -1,6 +1,6 @@
 # use lightweight Nginix image
 
-FROM nginix:alpine
+FROM nginx:alpine
 
 # Remove default nginix static files
 
