@@ -23,7 +23,7 @@ jobs:
     # Build Docker image
     - name: Build Docker Image
       run : |
-        docker build -t cloud-static -site .
+        docker build -t cloud-static-site .
 
     # Veryfy image exists
     - name: Verify Docker Images
