@@ -175,3 +175,23 @@ These reflect realistic cloud engineering troubleshooting scenarios.
 
 ---
 
+# Future Improvements
+
+Possible future enhancements:
+
+- AWS ECS deployment
+- Kubernetes deployment
+- Nginx reverse proxy configuration
+- SSL/HTTPS setup
+- GitHub Container Registry integration
+- Terraform infrastructure automation
+- Multi-stage Docker builds
+- Monitoring and logging integration
+
+---
+
+# Author
+
+Ramkrishna Roy Barman
+
+AWS Cloud Architect | Cloud & DevOps Enthusiast
