@@ -83,3 +83,95 @@ CMD ["nginx", "-g", "daemon off;"]
 
 ---
 
+# GitHub Actions Workflow
+
+The CI/CD pipeline automatically:
+
+- checks out repository code
+- builds Docker image
+- starts container
+- validates container health
+- tests website accessibility using curl
+
+Workflow file:
+
+```bash
+.github/workflows/docker-build.yml
+```
+
+---
+
+# Build Docker Image
+
+```bash
+docker build -t cloud-static-site .
+```
+
+---
+
+# Run Docker Container
+
+```bash
+docker run -d -p 8080:80 cloud-static-site
+```
+
+---
+
+# Access Website
+
+Main page:
+
+```text
+http://localhost:8080
+```
+
+Secondary page:
+
+```text
+http://localhost:8080/cloud_system-engineering.html
+```
+
+---
+
+# CI/CD Workflow
+
+The GitHub Actions pipeline validates:
+
+- Docker build success
+- container startup
+- Nginx execution
+- website availability
+
+This ensures deployment reliability before production usage.
+
+---
+
+# Learning Objectives
+
+This project demonstrates:
+
+- Docker containerization
+- Static web hosting with Nginx
+- GitHub Actions automation
+- CI/CD pipeline debugging
+- Container lifecycle management
+- Service health validation
+- Basic cloud deployment workflows
+
+---
+
+# Common Challenges Solved
+
+During implementation, several real-world DevOps issues were handled:
+
+- incorrect workflow branch configuration
+- Docker image naming issues
+- container startup timing problems
+- malformed Dockerfile configuration
+- CI/CD trigger debugging
+- Nginx service validation
+
+These reflect realistic cloud engineering troubleshooting scenarios.
+
+---
+
