@@ -3,16 +3,16 @@ name: Docker Static Site CI
 on:
   push:
     branches:
-      - master
+      - master               # Trigger on push to master branch since this is the main branch for deployment
     
   pull_request:
     branches:
-      - master
+      - master              # Trigger on pull request to master branch to ensure changes are tested before merging
 
 
 jobs:
   docker-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest                  # Use the latest Ubuntu runner for building and testing the Docker image it's a common choice for Docker workflows
 
     steps:
 
@@ -23,8 +23,7 @@ jobs:
     # Build Docker image
     - name: Build Docker Image
       run : |
-        docker build -t cloud-static-site .
-
+        docker build -t cloud-static-site .        
     # Run Docker container\
 
     - name: Run Docker Container
@@ -43,7 +42,7 @@ jobs:
   # Test the website
     - name: Test Website
       run: |
-        curl -I http://localhost:8080
+        curl -I http://localhost:8080           
           
 
     # Stop container
@@ -51,3 +50,7 @@ jobs:
       run: |
         docker stop static-site
         docker rm static-site
+
+
+
+# This workflow is designed to build a Docker image for a static site, run it in a container, and verify that it's working correctly. It includes steps to check the container logs and ensure that the website is accessible before stopping and removing the container.
